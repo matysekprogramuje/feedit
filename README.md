@@ -93,10 +93,6 @@ Run the test suite:
 
 Not yet specified. Consider adding a LICENSE file.
 
-## Author
-
-[matysekprogramuje](https://github.com/matysekprogramuje)
-
 ---
 
 **Status**: Early development (Version 0.0.1-SNAPSHOT)

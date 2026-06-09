@@ -2,8 +2,7 @@
 --  FEEDBACK SYSTEM — kompletní databázové schéma (PostgreSQL 17 / Supabase)
 --  Projekt: feedback-system  (ref: szxakuntflwocnaqqfag)
 --
---  Tohle je kanonický, kompletní stav databáze. Lze ho spustit na čisté
---  Supabase / Postgres instanci a dostaneš identické schéma jako v cloudu.
+--  Rozsah striktně podle Trella (sloupec Databáze) — nic navíc.
 --
 --  Hodnocení: feedbacks.rating = hvězdičky od AUTORA (jeho spokojenost).
 --             feedback_ratings = hvězdičky (1–5), kterými OSTATNÍ hodnotí
@@ -14,7 +13,6 @@
 -- 1) Rozšíření, pomocné funkce, enumy
 -- ---------------------------------------------------------------------
 create extension if not exists unaccent with schema extensions;
-create extension if not exists pg_trgm with schema extensions;
 
 create or replace function public.f_unaccent(text)
 returns text language plpgsql immutable parallel safe strict
@@ -46,7 +44,6 @@ end $$;
 create table if not exists public.profiles (
   id          uuid primary key references auth.users(id) on delete cascade,
   full_name   text,
-  avatar_url  text,
   role        public.app_role not null default 'user',
   created_at  timestamptz not null default now(),
   updated_at  timestamptz not null default now()
@@ -56,7 +53,6 @@ create table if not exists public.categories (
   id          uuid primary key default gen_random_uuid(),
   slug        text not null unique,
   name        text not null,
-  description text,
   sort_order  int  not null default 0,
   created_at  timestamptz not null default now()
 );
@@ -97,7 +93,7 @@ create table if not exists public.admin_notes (
   updated_at  timestamptz not null default now()
 );
 
--- Indexy
+-- Indexy (Trello: indexy pro rychlé vyhledávání)
 create index if not exists idx_feedbacks_search        on public.feedbacks using gin (search_vector);
 create index if not exists idx_feedbacks_keywords      on public.feedbacks using gin (keywords);
 create index if not exists idx_feedbacks_category      on public.feedbacks (category_id);
@@ -122,10 +118,8 @@ create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer set search_path=''
 as $$
 begin
-  insert into public.profiles (id, full_name, avatar_url)
-  values (new.id,
-          coalesce(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name'),
-          new.raw_user_meta_data->>'avatar_url')
+  insert into public.profiles (id, full_name)
+  values (new.id, coalesce(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name'))
   on conflict (id) do nothing;
   return new;
 end; $$;
@@ -166,7 +160,7 @@ create trigger trg_feedback_ratings_sync
   after insert or update or delete on public.feedback_ratings
   for each row execute function public.sync_feedback_stars();
 
--- Admin operace (SECURITY DEFINER, uvnitř hlídá is_admin())
+-- Admin: změna stavu řešení (SECURITY DEFINER, uvnitř hlídá is_admin())
 create or replace function public.admin_set_feedback_status(p_feedback_id uuid, p_status public.feedback_status)
 returns public.feedbacks language plpgsql security definer set search_path=''
 as $$
@@ -178,35 +172,19 @@ begin
   return result;
 end; $$;
 
-create or replace function public.admin_set_user_role(p_user_id uuid, p_role public.app_role)
-returns public.profiles language plpgsql security definer set search_path=''
-as $$
-declare result public.profiles;
-begin
-  if not public.is_admin() then raise exception 'Forbidden: admin only' using errcode='42501'; end if;
-  update public.profiles set role = p_role where id = p_user_id returning * into result;
-  if not found then raise exception 'User % not found', p_user_id using errcode='P0002'; end if;
-  return result;
-end; $$;
-
--- Statistiky (SECURITY INVOKER — data jsou veřejně čitelná)
+-- Statistiky pro firmu (přesně dle Trella)
 create or replace function public.get_feedback_stats()
 returns json language sql stable security invoker set search_path=''
 as $$
   select json_build_object(
-    'total',(select count(*) from public.feedbacks),
-    'average_rating',(select round(coalesce(avg(rating),0)::numeric,2) from public.feedbacks),
+    'total',            (select count(*) from public.feedbacks),
+    'average_rating',   (select round(coalesce(avg(rating),0)::numeric,2)      from public.feedbacks),
     'rating_percentage',(select round(coalesce(avg(rating),0)::numeric/5*100,1) from public.feedbacks),
-    'total_ratings',(select count(*) from public.feedback_ratings),
-    'community_avg_stars',(select round(coalesce(avg(stars),0)::numeric,2) from public.feedback_ratings),
-    'last_7_days',(select count(*) from public.feedbacks where created_at >= now()-interval '7 days'),
-    'last_30_days',(select count(*) from public.feedbacks where created_at >= now()-interval '30 days'),
-    'by_status',(select coalesce(json_object_agg(status,cnt),'{}'::json)
-                   from (select status,count(*) cnt from public.feedbacks group by status) s),
-    'by_rating',(select coalesce(json_object_agg(rating,cnt),'{}'::json)
-                   from (select rating,count(*) cnt from public.feedbacks group by rating) r));
+    'last_7_days',      (select count(*) from public.feedbacks where created_at >= now()-interval '7 days'),
+    'last_30_days',     (select count(*) from public.feedbacks where created_at >= now()-interval '30 days'));
 $$;
 
+-- Seskupení dat podle kategorií pro grafy
 create or replace function public.get_category_stats()
 returns table(category_id uuid, slug text, name text, feedback_count bigint, average_rating numeric)
 language sql stable security invoker set search_path=''
@@ -227,7 +205,7 @@ select f.id, f.title, f.body, f.rating, f.keywords, f.status,
        f.stars_avg, f.stars_count,
        f.created_at, f.updated_at, f.category_id,
        c.slug as category_slug, c.name as category_name,
-       f.user_id, p.full_name as author_name, p.avatar_url as author_avatar,
+       f.user_id, p.full_name as author_name,
        (select r.stars from public.feedback_ratings r
          where r.feedback_id = f.id and r.user_id = auth.uid()) as my_stars
 from public.feedbacks f
@@ -252,7 +230,7 @@ as $$
 $$;
 
 -- ---------------------------------------------------------------------
--- 5) RLS + oprávnění
+-- 5) RLS + oprávnění (Trello: ochrana databáze)
 -- ---------------------------------------------------------------------
 alter table public.profiles         enable row level security;
 alter table public.categories       enable row level security;
@@ -263,8 +241,8 @@ alter table public.admin_notes      enable row level security;
 -- PROFILES
 revoke all on public.profiles from anon, authenticated;
 grant select on public.profiles to anon, authenticated;
-grant insert (id, full_name, avatar_url) on public.profiles to authenticated;
-grant update (full_name, avatar_url)     on public.profiles to authenticated;  -- role NELZE měnit z klienta
+grant insert (id, full_name) on public.profiles to authenticated;
+grant update (full_name)     on public.profiles to authenticated;  -- role NELZE měnit z klienta
 create policy "profiles_select_all"          on public.profiles for select using (true);
 create policy "profiles_insert_self"         on public.profiles for insert to authenticated with check (id = (select auth.uid()));
 create policy "profiles_update_own_or_admin" on public.profiles for update to authenticated
@@ -315,9 +293,7 @@ revoke execute on function public.sync_feedback_stars()   from public, anon, aut
 revoke execute on function public.is_admin() from public, anon;
 grant  execute on function public.is_admin() to authenticated;
 revoke execute on function public.admin_set_feedback_status(uuid, public.feedback_status) from public, anon;
-revoke execute on function public.admin_set_user_role(uuid, public.app_role)              from public, anon;
 grant  execute on function public.admin_set_feedback_status(uuid, public.feedback_status) to authenticated;
-grant  execute on function public.admin_set_user_role(uuid, public.app_role)              to authenticated;
 grant  execute on function public.get_feedback_stats()  to anon, authenticated;
 grant  execute on function public.get_category_stats()  to anon, authenticated;
 grant  execute on function public.search_feedbacks(text, uuid, public.feedback_status, smallint, int, int) to anon, authenticated;

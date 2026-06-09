@@ -11,8 +11,6 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
@@ -48,13 +46,6 @@ export type Database = {
             foreignKeyName: "admin_notes_feedback_id_fkey"
             columns: ["feedback_id"]
             isOneToOne: false
-            referencedRelation: "feedback_details"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "admin_notes_feedback_id_fkey"
-            columns: ["feedback_id"]
-            isOneToOne: false
             referencedRelation: "feedbacks"
             referencedColumns: ["id"]
           },
@@ -63,7 +54,6 @@ export type Database = {
       categories: {
         Row: {
           created_at: string
-          description: string | null
           id: string
           name: string
           slug: string
@@ -71,7 +61,6 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          description?: string | null
           id?: string
           name: string
           slug: string
@@ -79,7 +68,6 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          description?: string | null
           id?: string
           name?: string
           slug?: string
@@ -113,13 +101,6 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "feedback_ratings_feedback_id_fkey"
-            columns: ["feedback_id"]
-            isOneToOne: false
-            referencedRelation: "feedback_details"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "feedback_ratings_feedback_id_fkey"
             columns: ["feedback_id"]
@@ -187,7 +168,6 @@ export type Database = {
       }
       profiles: {
         Row: {
-          avatar_url: string | null
           created_at: string
           full_name: string | null
           id: string
@@ -195,7 +175,6 @@ export type Database = {
           updated_at: string
         }
         Insert: {
-          avatar_url?: string | null
           created_at?: string
           full_name?: string | null
           id: string
@@ -203,7 +182,6 @@ export type Database = {
           updated_at?: string
         }
         Update: {
-          avatar_url?: string | null
           created_at?: string
           full_name?: string | null
           id?: string
@@ -216,7 +194,6 @@ export type Database = {
     Views: {
       feedback_details: {
         Row: {
-          author_avatar: string | null
           author_name: string | null
           body: string | null
           category_id: string | null
@@ -273,26 +250,6 @@ export type Database = {
           isSetofReturn: false
         }
       }
-      admin_set_user_role: {
-        Args: {
-          p_role: Database["public"]["Enums"]["app_role"]
-          p_user_id: string
-        }
-        Returns: {
-          avatar_url: string | null
-          created_at: string
-          full_name: string | null
-          id: string
-          role: Database["public"]["Enums"]["app_role"]
-          updated_at: string
-        }
-        SetofOptions: {
-          from: "*"
-          to: "profiles"
-          isOneToOne: true
-          isSetofReturn: false
-        }
-      }
       f_unaccent: { Args: { "": string }; Returns: string }
       feedback_search_vector: {
         Args: { p_body: string; p_keywords: string[]; p_title: string }
@@ -320,7 +277,6 @@ export type Database = {
           p_status?: Database["public"]["Enums"]["feedback_status"]
         }
         Returns: {
-          author_avatar: string | null
           author_name: string | null
           body: string | null
           category_id: string | null

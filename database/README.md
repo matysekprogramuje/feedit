@@ -65,7 +65,7 @@ auth.users ──1:1── profiles (role: user | admin)
 
 | Tabulka | K čemu | Kdo čte | Kdo zapisuje |
 |---|---|---|---|
-| `profiles` | jméno, avatar, **role** | všichni | uživatel jen své jméno/avatar; roli mění jen admin (RPC) |
+| `profiles` | jméno + **role** (user/admin) | všichni | uživatel jen své jméno; roli nelze měnit z klienta |
 | `categories` | číselník kategorií | všichni | jen admin |
 | `feedbacks` | odeslané recenze | všichni | přihlášený uživatel (jen své) |
 | `feedback_ratings` | hvězdičky (1–5) cizích recenzí | všichni | přihlášený (jen své, lze změnit) |
@@ -146,7 +146,7 @@ await supabase.from('feedback_ratings').delete().match({ feedback_id, user_id: u
 ### Statistiky (dashboard)
 ```ts
 const { data: stats } = await supabase.rpc('get_feedback_stats')
-// { total, average_rating, rating_percentage, total_ratings, community_avg_stars, last_7_days, last_30_days, by_status, by_rating }
+// { total, average_rating, rating_percentage, last_7_days, last_30_days }
 const { data: byCat } = await supabase.rpc('get_category_stats')   // pro grafy
 ```
 
@@ -168,7 +168,7 @@ Registrace dělá vždy roli `user`. Prvního admina povýšíš ručně (Supaba
 update public.profiles set role = 'admin'
 where id = (select id from auth.users where email = 'tvuj@email.cz');
 ```
-Další adminy už může povyšovat admin z appky přes `admin_set_user_role`.
+Stejně povýšíš i případné další adminy (Trello v appce správu rolí nepožaduje).
 
 ---
 
@@ -177,13 +177,13 @@ Další adminy už může povyšovat admin z appky přes `admin_set_user_role`.
 - **RLS zapnuté na všech tabulkách** — bez politiky se nedostaneš k ničemu.
 - **Sloupcová oprávnění**: uživatel fyzicky nemá právo zapsat `feedbacks.status`,
   `stars_avg`/`stars_count` ani `user_id` → nejde podvrhnout cizí feedback, falešný stav ani nafouknout hodnocení.
-- **Role nejde zvednout z klienta** (`profiles.role` není v UPDATE grantu) — jen přes admin RPC.
+- **Role nejde zvednout z klienta** (`profiles.role` není v UPDATE grantu) — jen ručně přes SQL.
 - **`admin_notes` jsou pro anon i běžné uživatele neviditelné.**
 - Hvězdičkové hodnocení jištěné `UNIQUE (feedback_id, user_id)` na úrovni DB (1 hlas na osobu).
 - Vyhledávání přes parametrizované RPC → žádná SQL injection.
 
-**Bezpečnostní audit (Supabase advisor): čistý**, kromě 3 záměrných WARN:
-`is_admin`, `admin_set_feedback_status`, `admin_set_user_role` jsou `SECURITY DEFINER`.
+**Bezpečnostní audit (Supabase advisor): čistý**, kromě 2 záměrných WARN:
+`is_admin` a `admin_set_feedback_status` jsou `SECURITY DEFINER`.
 Tak to **musí** být (obcházejí sloupcová oprávnění), a uvnitř mají kontrolu `is_admin()`.
 Linter o té vnitřní pojistce neví → varování je očekávané, ne chyba.
 
@@ -212,4 +212,4 @@ Linter o té vnitřní pojistce neví → varování je očekávané, ne chyba.
 - `database.types.ts` — TypeScript typy pro `createClient<Database>()`
 - `README.md` — tento dokument
 
-Schéma je už **nasazené** v cloudovém projektu (migrace 01–08). `schema.sql` je referenční/záložní.
+Schéma je už **nasazené** v cloudovém projektu (migrace 01–09). `schema.sql` je referenční/záložní.

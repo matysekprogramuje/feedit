@@ -1,17 +1,26 @@
 package io.github.feeditbackend.objects;
 
+import java.util.Date;
+
 public class Feedback {
 
     public String name, email, number, comment;
-    public int category;
+    public int rating, category;
+    public Date date;
     public boolean wantsContact;
 
-    public Feedback(String name, String email, String number, String comment, int category, boolean wantsContact) {
+    public Feedback() {
+        //empty
+    }
+
+    public Feedback(String name, String email, String number, String comment, int rating, int category, Date date, boolean wantsContact) {
         this.name = name;
         this.email = email;
         this.number = number;
         this.comment = comment;
+        this.rating = rating;
         this.category = category;
+        this.date = date;
         this.wantsContact = wantsContact;
     }
     

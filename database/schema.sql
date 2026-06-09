@@ -4,6 +4,10 @@
 --
 --  Rozsah striktně podle Trella (sloupec Databáze) — nic navíc.
 --
+--  Architektura: data tečou Frontend → Spring Boot backend → DB (JDBC).
+--  Backend se připojuje jako 'postgres' (plný přístup, RLS se na něj nevztahuje)
+--  a kontrolu "kdo co smí" si dělá sám podle tokenu. RLS + granty níže jsou pojistka.
+--
 --  Hodnocení: feedbacks.rating = hvězdičky od AUTORA (jeho spokojenost).
 --             feedback_ratings = hvězdičky (1–5), kterými OSTATNÍ hodnotí
 --             cizí recenzi; u feedbacku se drží průměr (stars_avg) a počet.
@@ -43,11 +47,13 @@ end $$;
 -- ---------------------------------------------------------------------
 create table if not exists public.profiles (
   id          uuid primary key references auth.users(id) on delete cascade,
-  full_name   text,
+  full_name   text,                          -- jméno (z formuláře / přihlášení)
+  phone       text,                           -- telefon z formuláře (osobní údaj → čte jen backend)
   role        public.app_role not null default 'user',
   created_at  timestamptz not null default now(),
   updated_at  timestamptz not null default now()
 );
+-- Pozn.: e-mail se neukládá zvlášť — je v auth.users.email (z přihlášení).
 
 create table if not exists public.categories (
   id          uuid primary key default gen_random_uuid(),
@@ -238,11 +244,11 @@ alter table public.feedbacks        enable row level security;
 alter table public.feedback_ratings enable row level security;
 alter table public.admin_notes      enable row level security;
 
--- PROFILES
+-- PROFILES (telefon je osobní údaj → NENÍ v SELECT grantu, čte ho jen backend/service_role)
 revoke all on public.profiles from anon, authenticated;
-grant select on public.profiles to anon, authenticated;
-grant insert (id, full_name) on public.profiles to authenticated;
-grant update (full_name)     on public.profiles to authenticated;  -- role NELZE měnit z klienta
+grant select (id, full_name, role, created_at, updated_at) on public.profiles to anon, authenticated;
+grant insert (id, full_name, phone) on public.profiles to authenticated;
+grant update (full_name, phone)     on public.profiles to authenticated;  -- role NELZE měnit z klienta
 create policy "profiles_select_all"          on public.profiles for select using (true);
 create policy "profiles_insert_self"         on public.profiles for insert to authenticated with check (id = (select auth.uid()));
 create policy "profiles_update_own_or_admin" on public.profiles for update to authenticated

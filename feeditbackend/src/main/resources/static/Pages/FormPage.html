@@ -2,9 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Formular</title>
 </head>
 <body>
+
+<div class="Form-page-body">
+
+<div class="panel active" id="panel-form">
+    <div class="form-card" id="form-wrap">
+        <div class="form-header">
+            <h2>Ohodnoťte vaši zkušenost</h2>
+            <p>Pomozte nám zlepšit naše služby — zabere to méně než minutu.</p>
+        </div>
+        <div class="row2">
+            <div class="field"><label>Jméno</label><input type="text" id="f-name" placeholder="Jan Novák" /></div>
+            <div class="field"><label>E-mail nebo telefon</label><input type="text" id="f-contact" placeholder="jan@email.cz" /></div>
+        </div>
+        <div class="field">
+            <label>Co hodnotíte?</label>
+            <div class="cat-list">
+                <div class="cat-option" onclick="selectCat(this)"><div class="cat-icon"><i class="ti ti-headset" aria-hidden="true"></i> Zákaznická podpora</div><i class="ti ti-check cat-check" aria-hidden="true"></i></div>
+                <div class="cat-option" onclick="selectCat(this)"><div class="cat-icon"><i class="ti ti-signal-4g" aria-hidden="true"></i> Mobilní síť</div><i class="ti ti-check cat-check" aria-hidden="true"></i></div>
+                <div class="cat-option" onclick="selectCat(this)"><div class="cat-icon"><i class="ti ti-wifi" aria-hidden="true"></i> Internetové připojení</div><i class="ti ti-check cat-check" aria-hidden="true"></i></div>
+                <div class="cat-option" onclick="selectCat(this)"><div class="cat-icon"><i class="ti ti-receipt" aria-hidden="true"></i> Fakturace</div><i class="ti ti-check cat-check" aria-hidden="true"></i></div>
+                <div class="cat-option" onclick="selectCat(this)"><div class="cat-icon"><i class="ti ti-device-mobile" aria-hidden="true"></i> Aplikace</div><i class="ti ti-check cat-check" aria-hidden="true"></i></div>
+                <div class="cat-option" onclick="selectCat(this)"><div class="cat-icon"><i class="ti ti-shopping-cart" aria-hidden="true"></i> Prodej a aktivace</div><i class="ti ti-check cat-check" aria-hidden="true"></i></div>
+                <div class="cat-option" onclick="selectCat(this)"><div class="cat-icon"><i class="ti ti-tools" aria-hidden="true"></i> Technická závada</div><i class="ti ti-check cat-check" aria-hidden="true"></i></div>
+                <div class="cat-option" onclick="selectCat(this)"><div class="cat-icon"><i class="ti ti-file-text" aria-hidden="true"></i> Smlouva a tarify</div><i class="ti ti-check cat-check" aria-hidden="true"></i></div>
+                <div class="cat-option" onclick="selectCat(this)"><div class="cat-icon"><i class="ti ti-dots-circle-horizontal" aria-hidden="true"></i> Jiné</div><i class="ti ti-check cat-check" aria-hidden="true"></i></div>
+            </div>
+        </div>
+        <div class="field">
+            <label>Hodnocení</label>
+            <div class="stars" id="stars">
+                <span class="star" onclick="setStars(1)">★</span>
+                <span class="star" onclick="setStars(2)">★</span>
+                <span class="star" onclick="setStars(3)">★</span>
+                <span class="star" onclick="setStars(4)">★</span>
+                <span class="star" onclick="setStars(5)">★</span>
+            </div>
+        </div>
+        <div class="field"><label>Komentář (nepovinné)</label><textarea id="f-comment" placeholder="Popište vaši zkušenost..."></textarea></div>
+        <div class="consent-row" onclick="toggleConsent()">
+            <div class="consent-check" id="consent-check"><i class="ti ti-check" aria-hidden="true"></i></div>
+            <div class="consent-text">Souhlasím s tím, aby mě Vodafone kontaktoval ohledně mé zpětné vazby.</div>
+        </div>
+        <button class="submit-btn" onclick="submitFeedback()"><i class="ti ti-send" aria-hidden="true"></i> Odeslat hodnocení</button>
+    </div>
+    <div class="success-card" id="success-card">
+        <div class="success-icon"><i class="ti ti-check" aria-hidden="true"></i></div>
+        <h3>Děkujeme!</h3>
+        <p>Vaše zpětná vazba byla odeslána. Váží si jí celý náš tým.</p>
+        <button class="back-btn" onclick="sendDataSet()">Odeslat další hodnocení</button>
+    </div>
+</div>
+</div>
 
 </body>
 </html>

@@ -26,11 +26,13 @@ public class AdminController {
 
     @GetMapping("/getTotalRating")
     public String getTotalRating() {
-        return String.valueOf(FeeditbackendApplication.feedbacks.stream()
-            .mapToInt(f -> f.rating)
+        double avg = FeeditbackendApplication.feedbacks.stream()
+            .mapToDouble(f -> f.rating)
             .sum()
-            /FeeditbackendApplication.feedbacks.size()
-        );
+            /(double)FeeditbackendApplication.feedbacks.size();
+        avg = Math.round(avg * 100) / 100.0;
+
+        return String.valueOf(avg);
     }
     
     

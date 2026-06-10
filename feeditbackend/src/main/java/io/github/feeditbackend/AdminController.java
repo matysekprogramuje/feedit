@@ -2,20 +2,18 @@ package io.github.feeditbackend;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.github.feeditbackend.data.Data;
 import io.github.feeditbackend.objects.Feedback;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("api/admin")
 public class AdminController {
 
     @GetMapping("/getFeedback")
-    public List<Feedback> getFeedback(@RequestParam(name="resolved", defaultValue="true") boolean resolved, @RequestParam(name="rating", defaultValue="0") int rating, @RequestParam(name="category", defaultValue="0") int category) {
+    public List<Feedback> getFeedback(@RequestParam(name="resolved", defaultValue="false") boolean resolved, @RequestParam(name="rating", defaultValue="0") int rating, @RequestParam(name="category", defaultValue="0") int category) {
         List<Feedback> list = Data.feedbacks.stream()
         .filter(f -> resolved || f.resolved == resolved)
         .filter(f -> rating == 0 || f.rating == rating)

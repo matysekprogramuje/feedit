@@ -1,123 +1,91 @@
-let selectedRating = 0;
 let selectedCategory = -1;
+let selectedRating = 0;
 let consentGiven = false;
 
-function isValidContact(contact) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRegex = /^[\+]?[\d\s\-\(\)]{9,15}$/;
-    return emailRegex.test(contact) || phoneRegex.test(contact);
-}
-
-function setStars(n) {
-    selectedRating = n;
-    document.querySelectorAll('.star').forEach((s, i) => {
-        s.classList.toggle('active', i < n);
+function selectCategory(el) {
+    document.querySelectorAll(".category-option").forEach(opt => opt.classList.remove("selected"));
+    el.classList.add("selected");
+    const options = document.querySelectorAll(".category-option");
+    options.forEach((opt, index) => {
+        if (opt === el) selectedCategory = index;
     });
 }
 
-function selectCategory(el) {
-    document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
-    el.classList.add('selected');
-    selectedCategory = [...el.parentElement.children].indexOf(el);
+function setStars(count) {
+    selectedRating = count;
+    document.querySelectorAll(".star").forEach((star, i) => {
+        star.classList.toggle("active", i < count);
+    });
 }
 
 function toggleConsent() {
     consentGiven = !consentGiven;
-    document.getElementById('consent-check').classList.toggle('checked', consentGiven);
+    document.getElementById("consent-check").classList.toggle("checked", consentGiven);
 }
 
 function resetForm() {
-    selectedRating = 0;
+    document.getElementById("name").value = "";
+    document.getElementById("contact").value = "";
+    document.getElementById("comment").value = "";
     selectedCategory = -1;
+    selectedRating = 0;
     consentGiven = false;
 
-    document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
-    document.getElementById('consent-check').classList.remove('checked');
+    document.querySelectorAll(".category-option").forEach(opt => opt.classList.remove("selected"));
+    document.querySelectorAll(".star").forEach(star => star.classList.remove("active"));
+    document.getElementById("consent-check").classList.remove("checked");
 
-    document.getElementById('name').value = '';
-    document.getElementById('contact').value = '';
-    document.getElementById('comment').value = '';
-
-    document.getElementById('contact').style.borderColor = '';
-
-    document.querySelector('.form-body').style.display = 'block';
-    document.getElementById('success-card').style.display = 'none';
+    document.getElementById("success-card").style.display = "none";
+    document.querySelector(".form-body").style.display = "";
 }
 
-document.getElementById('contact').addEventListener('blur', function () {
-    const val = this.value.trim();
-    if (val && !isValidContact(val)) {
-        this.style.borderColor = 'red';
-    } else {
-        this.style.borderColor = '';
-    }
-});
+function submitFeedback() {
+    const nameVal = document.getElementById("name").value.trim();
+    const contactVal = document.getElementById("contact").value.trim();
+    const commentVal = document.getElementById("comment").value.trim();
 
-async function submitFeedback() {
-    const name    = document.getElementById('name').value.trim();
-    const contact = document.getElementById('contact').value.trim();
-    const comment = document.getElementById('comment').value.trim();
-
-    if (!name || !contact || selectedCategory === -1 || selectedRating === 0) {
-        alert('Vyplňte prosím jméno, kontakt, kategorii a hodnocení.');
+    if (!nameVal || !contactVal || selectedCategory === -1 || selectedRating === 0) {
+        alert("Vyplňte prosím všechna povinná pole.");
         return;
     }
 
-    if (!isValidContact(contact)) {
-        alert('Zadejte platný e-mail nebo telefonní číslo.');
-        document.getElementById('contact').style.borderColor = 'red';
-        return;
-    }
+    // Determine if contact is email or phone number
+    const isEmail = contactVal.includes("@");
+    const email = isEmail ? contactVal : "";
+    const number = isEmail ? "" : contactVal;
 
-    const isEmail = contact.includes('@');
-    const email   = isEmail ? contact : '';
-    const number  = isEmail ? '' : contact;
-
-    const result = await sendDataSet(name, email, number, comment, selectedCategory, consentGiven);
-
-    if (!result) {
-        alert('Odeslání se nezdařilo. Zkuste to prosím znovu.');
-        return;
-    }
-
-    document.querySelector('.form-body').style.display = 'none';
-    document.getElementById('success-card').style.display = 'flex';
-}
-
-async function sendDataSet(name, email, number, comment, category, wantsContact) {
-    const categories = [
-        "Zákaznická podpora", "Mobilní služby", "Internetové připojení",
-        "TV a zábava", "Prodejna Vodafone", "Fakturace a platby",
-        "Aplikace Můj Vodafone", "Jiné"
-    ];
+    const today = new Date();
+    const date = today.toISOString().split("T")[0]; // "YYYY-MM-DD"
 
     const feedback = {
-        name:         name,
-        email:        email,
-        number:       number,
-        comment:      comment,
-        rating:       selectedRating,
-        category:     categories[category],
-        date:         new Date(),
-        wantsContact: wantsContact
+        name: nameVal,
+        email: email,
+        number: number,
+        comment: commentVal,
+        rating: selectedRating,
+        category: selectedCategory,
+        date: date,
+        wantsContact: consentGiven,
+        resolved: false
     };
 
-    try {
-        const response = await fetch("http://localhost:8080/api/user/sendFeedback", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(feedback)
+    fetch("http://localhost:8080/api/user/sendFeedback", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(feedback)
+    })
+        .then(response => {
+            if (!response.ok) throw new Error("Chyba serveru: " + response.status);
+            return response.json();
+        })
+        .then(() => {
+            document.querySelector(".form-body").style.display = "none";
+            document.getElementById("success-card").style.display = "";
+        })
+        .catch(err => {
+            console.error("Chyba při odesílání:", err);
+            alert("Nepodařilo se odeslat hodnocení. Zkuste to prosím znovu.");
         });
-
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-        const data = await response.json();
-        console.log("Odpověď serveru:", data);
-        return data;
-
-    } catch (error) {
-        console.error("Chyba při odesílání:", error);
-        return null;
-    }
 }

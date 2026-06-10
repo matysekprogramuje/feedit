@@ -21,10 +21,44 @@ function clearError(id) {
     document.getElementById(id).classList.remove('input-error');
 }
 
+function showCategoryError(message) {
+    const field = document.querySelector('.category-list').closest('.field');
+    let err = field.querySelector('.field-error');
+    if (!err) {
+        err = document.createElement('span');
+        err.className = 'field-error';
+        field.appendChild(err);
+    }
+    err.textContent = message;
+}
+
+function clearCategoryError() {
+    const field = document.querySelector('.category-list').closest('.field');
+    const err = field.querySelector('.field-error');
+    if (err) err.remove();
+}
+
+function showRatingError(message) {
+    const field = document.querySelector('.stars').closest('.field');
+    let err = field.querySelector('.field-error');
+    if (!err) {
+        err = document.createElement('span');
+        err.className = 'field-error';
+        field.appendChild(err);
+    }
+    err.textContent = message;
+}
+
+function clearRatingError() {
+    const field = document.querySelector('.stars').closest('.field');
+    const err = field.querySelector('.field-error');
+    if (err) err.remove();
+}
+
 function validateName(value) {
     if (!value) return 'Jméno je povinné.';
-    if (/\d/.test(value)) return 'Jméno nesmí obsahovat čísla.';
     if (value.trim().length < 3) return 'Jméno musí mít alespoň 3 znaky.';
+    if (!/^[\p{L}\s]+$/u.test(value)) return 'Jméno smí obsahovat pouze písmena.';
     return null;
 }
 
@@ -41,12 +75,14 @@ function setStars(n) {
     document.querySelectorAll('.star').forEach((s, i) => {
         s.classList.toggle('active', i < n);
     });
+    clearRatingError();
 }
 
 function selectCategory(el) {
     document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
     el.classList.add('selected');
     selectedCategory = [...el.parentElement.children].indexOf(el);
+    clearCategoryError();
 }
 
 function toggleConsent() {
@@ -64,10 +100,26 @@ function submitFeedback() {
     nameError ? showError('name', nameError) : clearError('name');
     contactError ? showError('contact', contactError) : clearError('contact');
 
-    if (nameError || contactError) return;
+    if (selectedCategory === -1) {
+        showCategoryError('Vyberte prosím kategorii.');
+    } else {
+        clearCategoryError();
+    }
 
-    if (selectedCategory === -1) return;
-    if (selectedRating === 0) return;
+    if (selectedRating === 0) {
+        showRatingError('Vyberte prosím hodnocení.');
+    } else {
+        clearRatingError();
+    }
+
+    // Evaluate all conditions independently before blocking — avoids short-circuit skipping
+    const hasErrors =
+        Boolean(nameError) ||
+        Boolean(contactError) ||
+        selectedCategory === -1 ||
+        selectedRating === 0;
+
+    if (hasErrors) return;
 
     document.querySelector('.form-body').style.display = 'none';
     const card = document.getElementById('success-card');
@@ -89,6 +141,8 @@ function resetForm() {
 
     clearError('name');
     clearError('contact');
+    clearCategoryError();
+    clearRatingError();
 
     document.querySelector('.form-body').style.display = 'block';
     document.getElementById('success-card').style.display = 'none';

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Feed-it | Customer Feedback Dashboard</title>
+
+    <link rel="stylesheet" href="Admin.css">
+
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+            rel="stylesheet">
+
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body>
+
+<div class="app">
+
+    <!-- TOP BAR -->
+
+    <header class="topbar">
+
+        <div class="topbar-left">
+
+            <div class="brand-logo">
+                <i class="ti ti-message-dots"></i>
+            </div>
+
+            <div>
+                <h1>Feed-it</h1>
+                <p>Customer Feedback Management</p>
+            </div>
+
+        </div>
+
+        <div class="topbar-right">
+
+            <div class="admin-badge">
+                <i class="ti ti-building"></i>
+                Vodafone Czech Republic
+            </div>
+
+            <div class="user-chip">
+
+                <div class="user-avatar">
+                    AD
+                </div>
+
+                <div>
+                    <div class="user-name">
+                        Administrator
+                    </div>
+
+                    <small>
+                        Feed-it Admin
+                    </small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </header>
+
+    <!-- PAGE HEADER -->
+
+    <section class="page-header">
+
+        <div>
+
+            <h2>Customer Feedback</h2>
+
+            <p>
+                Monitor customer satisfaction, identify critical issues
+                and improve service quality across all Vodafone channels.
+            </p>
+
+        </div>
+
+        <div class="header-actions">
+
+            <button class="action-btn">
+                <i class="ti ti-download"></i>
+                Export
+            </button>
+
+            <button class="action-btn primary">
+                <i class="ti ti-refresh"></i>
+                Refresh
+            </button>
+
+        </div>
+
+    </section>
+
+    <!-- KPI CARDS -->
+
+    <section class="stats-grid">
+
+        <div class="stat-card">
+
+            <div class="stat-icon red">
+                <i class="ti ti-message"></i>
+            </div>
+
+            <div class="stat-info">
+
+                <span class="stat-label">
+                    Total Feedback
+                </span>
+
+                <span class="stat-value" id="s-total">
+                    0
+                </span>
+
+                <span class="stat-trend">
+                    All submitted reviews
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-icon gold">
+                <i class="ti ti-star"></i>
+            </div>
+
+            <div class="stat-info">
+
+                <span class="stat-label">
+                    Average Rating
+                </span>
+
+                <span class="stat-value" id="s-avg">
+                    0
+                </span>
+
+                <span class="stat-trend">
+                    Customer satisfaction
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-icon orange">
+                <i class="ti ti-alert-triangle"></i>
+            </div>
+
+            <div class="stat-info">
+
+                <span class="stat-label">
+                    Critical Reviews
+                </span>
+
+                <span class="stat-value" id="s-neg">
+                    0
+                </span>
+
+                <span class="stat-trend">
+                    Requires attention
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="stat-card">
+
+            <div class="stat-icon blue">
+                <i class="ti ti-phone"></i>
+            </div>
+
+            <div class="stat-info">
+
+                <span class="stat-label">
+                    Contact Requests
+                </span>
+
+                <span class="stat-value" id="s-contact">
+                    0
+                </span>
+
+                <span class="stat-trend">
+                    Awaiting response
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- SEARCH -->
+
+    <section class="toolbar">
+
+        <div class="search-box">
+
+            <i class="ti ti-search"></i>
+
+            <input
+                    type="text"
+                    id="search-input"
+                    placeholder="Search customer feedback..."
+                    oninput="render()">
+
+        </div>
+
+    </section>
+
+    <!-- SORTING -->
+
+    <section class="sort-row">
+
+        <button
+                class="sort-btn active"
+                id="btn-date"
+                onclick="setSort('date')">
+
+            <i class="ti ti-calendar"></i>
+            Latest
+
+        </button>
+
+        <button
+                class="sort-btn"
+                id="btn-stars-desc"
+                onclick="setSort('stars-desc')">
+
+            <i class="ti ti-star"></i>
+            Highest Rated
+
+        </button>
+
+        <button
+                class="sort-btn"
+                id="btn-stars-asc"
+                onclick="setSort('stars-asc')">
+
+            <i class="ti ti-star-half"></i>
+            Lowest Rated
+
+        </button>
+
+    </section>
+
+    <!-- CATEGORY FILTERS -->
+
+    <section
+            class="category-tabs"
+            id="cat-tabs">
+    </section>
+
+    <!-- SECTION HEADER -->
+
+    <div class="section-header">
+
+        <div>
+
+            <h3>Customer Feedback</h3>
+
+            <p>
+                Review and manage customer submissions
+            </p>
+
+        </div>
+
+        <div
+                class="results-count"
+                id="results-info">
+
+            0 reviews
+
+        </div>
+
+    </div>
+
+    <!-- FEEDBACK CARDS -->
+
+    <section
+            class="feedback-grid"
+            id="cards">
+    </section>
+
+    <!-- EMPTY STATE -->
+
+    <div
+            class="empty-state"
+            id="empty-state"
+            style="display:none;">
+
+        <i class="ti ti-search-off"></i>
+
+        <h3>
+            No feedback found
+        </h3>
+
+        <p>
+            Try changing your search or filter settings.
+        </p>
+
+    </div>
+
+</div>
+
+<script src="Admin.js"></script>
+
+</body>
+</html>

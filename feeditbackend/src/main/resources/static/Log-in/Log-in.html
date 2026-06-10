@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed-it Portal</title>
+
+    <link rel="stylesheet" href="Log-in.css">
+
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body>
+
+<div class="background"></div>
+
+<div class="container">
+
+    <div class="hero">
+
+        <div class="logo">
+            <div class="logo-circle"></div>
+
+            <div>
+                <h3>Vodafone</h3>
+                <p>Feed-it Platform</p>
+            </div>
+        </div>
+
+        <div class="hero-content">
+
+            <h1>Customer Experience Portal</h1>
+
+            <p>
+                Manage customer feedback,
+                monitor satisfaction and improve service quality.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="login-panel">
+
+        <div class="login-card">
+
+            <div class="icon">
+                <i class="ti ti-message-dots"></i>
+            </div>
+
+            <h2>Sign In</h2>
+
+            <p class="subtitle">
+                Access the feedback management system.
+            </p>
+
+            <div class="role-toggle">
+
+                <button
+                        class="role-btn active"
+                        id="role-user-btn"
+                        onclick="setRole('user')">
+
+                    Customer
+
+                </button>
+
+                <button
+                        class="role-btn"
+                        id="role-admin-btn"
+                        onclick="setRole('admin')">
+
+                    Admin
+
+                </button>
+
+            </div>
+
+            <div
+                    class="login-error"
+                    id="login-error">
+
+                Invalid credentials
+
+            </div>
+
+            <div class="field">
+                <label>Username</label>
+
+                <input
+                        type="text"
+                        id="l-user"
+                        placeholder="Enter username">
+            </div>
+
+            <div class="field">
+                <label>Password</label>
+
+                <input
+                        type="password"
+                        id="l-pass"
+                        placeholder="Enter password">
+            </div>
+
+            <button
+                    class="login-btn"
+                    onclick="doLogin()">
+
+                Sign In
+
+            </button>
+
+            <div class="demo">
+
+                <strong>Demo Accounts</strong>
+
+                <p>Customer: customer / user123</p>
+
+                <p>Admin: admin / admin123</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="Log-in.js"></script>
+
+</body>
+</html>
+

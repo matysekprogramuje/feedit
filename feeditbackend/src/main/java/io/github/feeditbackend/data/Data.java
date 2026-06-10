@@ -3,7 +3,6 @@ package io.github.feeditbackend.data;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +27,7 @@ public class Data {
                 .map(f -> new Feedback(f[0], f[1], f[2], f[3], Integer.parseInt(f[4]), Integer.parseInt(f[5]), LocalDate.parse(f[6]), Boolean.parseBoolean(f[7]), Boolean.parseBoolean(f[8])))
                 .toList()
             );
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		} catch (Exception e) {}
     }
 
     public static boolean addFeedback(Feedback f) {

@@ -9,8 +9,9 @@ import io.github.feeditbackend.data.Data;
 public class FeeditbackendApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FeeditbackendApplication.class, args);
-
 		Data.loadFeedback();
+
+
+		SpringApplication.run(FeeditbackendApplication.class, args);
 	}
 }

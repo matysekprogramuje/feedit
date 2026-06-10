@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.github.feeditbackend.data.Data;
 import io.github.feeditbackend.objects.Feedback;
 
 
@@ -15,7 +16,7 @@ public class UserContoller {
 
     @PostMapping("/sendFeedback")
     public ResponseEntity<Feedback> sendFeedback(@RequestBody Feedback entity) {
-        FeeditbackendApplication.feedbacks.add(entity);
+        Data.addFeedback(entity);
 
         return ResponseEntity.ok(entity);
     }

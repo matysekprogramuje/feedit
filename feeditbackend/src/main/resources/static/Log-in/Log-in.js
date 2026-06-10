@@ -1,41 +1,14 @@
-let currentRole = "user";
-
-function setRole(role) {
-    currentRole = role;
-
-    document.getElementById("role-user-btn").classList.remove("active");
-    document.getElementById("role-admin-btn").classList.remove("active");
-
-    if (role === "user") {
-        document.getElementById("role-user-btn").classList.add("active");
-    } else {
-        document.getElementById("role-admin-btn").classList.add("active");
-    }
-
-    hideError();
-}
-
 function doLogin() {
     const username = document.getElementById("l-user").value.trim().toLowerCase();
     const password = document.getElementById("l-pass").value.trim();
 
-    let valid = false;
-
-    if (currentRole === "user"  && username === "customer" && password === "user123")  valid = true;
-    if (currentRole === "admin" && username === "admin"    && password === "admin123") valid = true;
-
-    if (valid) {
+    if (username === "admin" && password === "admin123") {
         hideError();
+        window.location.href = "Admin.html";
 
-        // Store role so destination pages know who is logged in
-        sessionStorage.setItem("feedit-role", currentRole);
-        sessionStorage.setItem("feedit-user", username);
-
-        if (currentRole === "admin") {
-            window.location.href = "Admin.html";
-        } else {
-            window.location.href = "FeedbackForm.html";
-        }
+    } else if (username === "customer" && password === "user123") {
+        hideError();
+        window.location.href = "FeedbackForm.html";
 
     } else {
         showError();
@@ -52,7 +25,6 @@ function hideError() {
 
 document.addEventListener("DOMContentLoaded", () => {
     hideError();
-
     document.getElementById("l-user").addEventListener("keydown", handleEnter);
     document.getElementById("l-pass").addEventListener("keydown", handleEnter);
 });

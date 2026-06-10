@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Feed-it Portal</title>
+    <title>Feed-it Portál</title>
 
     <link rel="stylesheet" href="Log-in.css">
 
@@ -24,17 +24,17 @@
 
             <div>
                 <h3>Vodafone</h3>
-                <p>Feed-it Platform</p>
+                <p>Platforma Feed-it</p>
             </div>
         </div>
 
         <div class="hero-content">
 
-            <h1>Customer Experience Portal</h1>
+            <h1>Portál zákaznické zkušenosti</h1>
 
             <p>
-                Manage customer feedback,
-                monitor satisfaction and improve service quality.
+                Spravujte zpětnou vazbu zákazníků,
+                sledujte spokojenost a zlepšujte kvalitu služeb.
             </p>
 
         </div>
@@ -49,75 +49,53 @@
                 <i class="ti ti-message-dots"></i>
             </div>
 
-            <h2>Sign In</h2>
+            <h2>Přihlášení</h2>
 
             <p class="subtitle">
-                Access the feedback management system.
+                Přihlaste se do systému správy zpětné vazby.
             </p>
-
-            <div class="role-toggle">
-
-                <button
-                        class="role-btn active"
-                        id="role-user-btn"
-                        onclick="setRole('user')">
-
-                    Customer
-
-                </button>
-
-                <button
-                        class="role-btn"
-                        id="role-admin-btn"
-                        onclick="setRole('admin')">
-
-                    Admin
-
-                </button>
-
-            </div>
 
             <div
                     class="login-error"
                     id="login-error">
 
-                Invalid credentials
+                Nesprávné přihlašovací údaje
 
             </div>
 
             <div class="field">
-                <label>Username</label>
+                <label>Uživatelské jméno</label>
 
                 <input
                         type="text"
                         id="l-user"
-                        placeholder="Enter username">
+                        placeholder="Zadejte uživatelské jméno">
             </div>
 
             <div class="field">
-                <label>Password</label>
+                <label>Heslo</label>
 
                 <input
                         type="password"
                         id="l-pass"
-                        placeholder="Enter password">
+                        placeholder="Zadejte heslo">
             </div>
 
             <button
                     class="login-btn"
                     onclick="doLogin()">
 
-                Sign In
+                Přihlásit se
 
             </button>
 
             <div class="demo">
 
-                <strong>Demo Accounts</strong>
+                <strong>Testovací účty</strong>
 
-                <p>Customer: customer / user123</p>
+                <p>Zákazník: customer / user123</p>
 
-                <p>Admin: admin / admin123</p>
+                <p>Administrátor: admin / admin123</p>
 
             </div>
 
@@ -131,4 +109,3 @@
 
 </body>
 </html>
-

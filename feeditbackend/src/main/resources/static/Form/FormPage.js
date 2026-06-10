@@ -70,12 +70,24 @@ function validateContact(value) {
     return null;
 }
 
+function checkFormError() {
+    const nameError    = validateName(document.getElementById('name').value.trim());
+    const contactError = validateContact(document.getElementById('contact').value.trim());
+    const hasErrors =
+        Boolean(nameError) ||
+        Boolean(contactError) ||
+        selectedCategory === -1 ||
+        selectedRating === 0;
+    if (!hasErrors) document.querySelector('.form-error').style.display = 'none';
+}
+
 function setStars(n) {
     selectedRating = n;
     document.querySelectorAll('.star').forEach((s, i) => {
         s.classList.toggle('active', i < n);
     });
     clearRatingError();
+    checkFormError();
 }
 
 function selectCategory(el) {
@@ -83,47 +95,12 @@ function selectCategory(el) {
     el.classList.add('selected');
     selectedCategory = [...el.parentElement.children].indexOf(el);
     clearCategoryError();
+    checkFormError();
 }
 
 function toggleConsent() {
     consentGiven = !consentGiven;
     document.getElementById('consent-check').classList.toggle('checked', consentGiven);
-}
-
-function submitFeedback() {
-    const name = document.getElementById('name').value.trim();
-    const contact = document.getElementById('contact').value.trim();
-
-    const nameError = validateName(name);
-    const contactError = validateContact(contact);
-
-    nameError ? showError('name', nameError) : clearError('name');
-    contactError ? showError('contact', contactError) : clearError('contact');
-
-    if (selectedCategory === -1) {
-        showCategoryError('Vyberte prosím kategorii.');
-    } else {
-        clearCategoryError();
-    }
-
-    if (selectedRating === 0) {
-        showRatingError('Vyberte prosím hodnocení.');
-    } else {
-        clearRatingError();
-    }
-
-    // Evaluate all conditions independently before blocking — avoids short-circuit skipping
-    const hasErrors =
-        Boolean(nameError) ||
-        Boolean(contactError) ||
-        selectedCategory === -1 ||
-        selectedRating === 0;
-
-    if (hasErrors) return;
-
-    document.querySelector('.form-body').style.display = 'none';
-    const card = document.getElementById('success-card');
-    card.style.display = 'flex';
 }
 
 function resetForm() {
@@ -144,6 +121,7 @@ function resetForm() {
     clearCategoryError();
     clearRatingError();
 
+    document.querySelector('.form-error').style.display = 'none';
     document.querySelector('.form-body').style.display = 'block';
     document.getElementById('success-card').style.display = 'none';
 }
@@ -151,9 +129,11 @@ function resetForm() {
 document.getElementById('name').addEventListener('input', function () {
     const error = validateName(this.value.trim());
     error ? showError('name', error) : clearError('name');
+    checkFormError();
 });
 
 document.getElementById('contact').addEventListener('input', function () {
     const error = validateContact(this.value.trim());
     error ? showError('contact', error) : clearError('contact');
+    checkFormError();
 });

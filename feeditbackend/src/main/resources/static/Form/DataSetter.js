@@ -3,14 +3,40 @@ async function submitFeedback() {
     const contact = document.getElementById('contact').value.trim();
     const comment = document.getElementById('comment').value.trim();
 
+    const nameError    = validateName(name);
+    const contactError = validateContact(contact);
+
+    nameError    ? showError('name', nameError)       : clearError('name');
+    contactError ? showError('contact', contactError) : clearError('contact');
+
+    if (selectedCategory === -1) {
+        showCategoryError('Vyberte prosím kategorii.');
+    } else {
+        clearCategoryError();
+    }
+
+    if (selectedRating === 0) {
+        showRatingError('Vyberte prosím hodnocení.');
+    } else {
+        clearRatingError();
+    }
+
+    const hasErrors =
+        Boolean(nameError) ||
+        Boolean(contactError) ||
+        selectedCategory === -1 ||
+        selectedRating === 0;
+
+    if (hasErrors) {
+        document.querySelector('.form-error').style.display = 'block';
+        return;
+    }
+
+    document.querySelector('.form-error').style.display = 'none';
+
     const isEmail = contact.includes('@');
     const email   = isEmail ? contact : '';
     const number  = isEmail ? '' : contact;
-
-    if (!name || !contact || selectedCategory === -1 || selectedRating === 0) {
-        alert('Vyplňte prosím jméno, kontakt, kategorii a hodnocení.');
-        return;
-    }
 
     await sendDataSet(name, email, number, comment, selectedCategory, consentGiven);
 

@@ -28,6 +28,15 @@ body {
     margin-top: 5px;
 }
 
+.form-error {
+
+    font-size: 15px;
+    color: #e60000;
+    margin-top: 5px;
+    text-align: center; 
+    width: 100%;
+}
+
 .pre-header {
     background: #25282b;
     height: 30px;

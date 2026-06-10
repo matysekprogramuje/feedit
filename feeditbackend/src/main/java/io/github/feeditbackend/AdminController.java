@@ -2,14 +2,12 @@ package io.github.feeditbackend;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import io.github.feeditbackend.data.Data;
 import io.github.feeditbackend.objects.Feedback;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("api/admin")
 public class AdminController {

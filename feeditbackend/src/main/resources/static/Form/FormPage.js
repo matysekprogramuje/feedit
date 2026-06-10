@@ -2,10 +2,38 @@ let selectedRating = 0;
 let selectedCategory = -1;
 let consentGiven = false;
 
-function isValidContact(contact) {
+function showError(id, message) {
+    const field = document.getElementById(id).closest('.field');
+    let err = field.querySelector('.field-error');
+    if (!err) {
+        err = document.createElement('span');
+        err.className = 'field-error';
+        field.appendChild(err);
+    }
+    err.textContent = message;
+    document.getElementById(id).classList.add('input-error');
+}
+
+function clearError(id) {
+    const field = document.getElementById(id).closest('.field');
+    const err = field.querySelector('.field-error');
+    if (err) err.remove();
+    document.getElementById(id).classList.remove('input-error');
+}
+
+function validateName(value) {
+    if (!value) return 'Jméno je povinné.';
+    if (/\d/.test(value)) return 'Jméno nesmí obsahovat čísla.';
+    if (value.trim().length < 3) return 'Jméno musí mít alespoň 3 znaky.';
+    return null;
+}
+
+function validateContact(value) {
+    if (!value) return 'E-mail nebo telefon je povinný.';
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRegex = /^[\+]?[\d\s\-\(\)]{9,15}$/;
-    return emailRegex.test(contact) || phoneRegex.test(contact);
+    const phoneRegex = /^\+?[\d\s\-()]{7,15}$/;
+    if (!emailRegex.test(value) && !phoneRegex.test(value)) return 'Zadejte platný e-mail nebo telefonní číslo.';
+    return null;
 }
 
 function setStars(n) {
@@ -26,6 +54,26 @@ function toggleConsent() {
     document.getElementById('consent-check').classList.toggle('checked', consentGiven);
 }
 
+function submitFeedback() {
+    const name = document.getElementById('name').value.trim();
+    const contact = document.getElementById('contact').value.trim();
+
+    const nameError = validateName(name);
+    const contactError = validateContact(contact);
+
+    nameError ? showError('name', nameError) : clearError('name');
+    contactError ? showError('contact', contactError) : clearError('contact');
+
+    if (nameError || contactError) return;
+
+    if (selectedCategory === -1) return;
+    if (selectedRating === 0) return;
+
+    document.querySelector('.form-body').style.display = 'none';
+    const card = document.getElementById('success-card');
+    card.style.display = 'flex';
+}
+
 function resetForm() {
     selectedRating = 0;
     selectedCategory = -1;
@@ -39,85 +87,19 @@ function resetForm() {
     document.getElementById('contact').value = '';
     document.getElementById('comment').value = '';
 
-    document.getElementById('contact').style.borderColor = '';
+    clearError('name');
+    clearError('contact');
 
     document.querySelector('.form-body').style.display = 'block';
     document.getElementById('success-card').style.display = 'none';
 }
 
-document.getElementById('contact').addEventListener('blur', function () {
-    const val = this.value.trim();
-    if (val && !isValidContact(val)) {
-        this.style.borderColor = 'red';
-    } else {
-        this.style.borderColor = '';
-    }
+document.getElementById('name').addEventListener('input', function () {
+    const error = validateName(this.value.trim());
+    error ? showError('name', error) : clearError('name');
 });
 
-async function submitFeedback() {
-    const name    = document.getElementById('name').value.trim();
-    const contact = document.getElementById('contact').value.trim();
-    const comment = document.getElementById('comment').value.trim();
-
-    if (!name || !contact || selectedCategory === -1 || selectedRating === 0) {
-        alert('Vyplňte prosím jméno, kontakt, kategorii a hodnocení.');
-        return;
-    }
-
-    if (!isValidContact(contact)) {
-        alert('Zadejte platný e-mail nebo telefonní číslo.');
-        document.getElementById('contact').style.borderColor = 'red';
-        return;
-    }
-
-    const isEmail = contact.includes('@');
-    const email   = isEmail ? contact : '';
-    const number  = isEmail ? '' : contact;
-
-    const result = await sendDataSet(name, email, number, comment, selectedCategory, consentGiven);
-
-    if (!result) {
-        alert('Odeslání se nezdařilo. Zkuste to prosím znovu.');
-        return;
-    }
-
-    document.querySelector('.form-body').style.display = 'none';
-    document.getElementById('success-card').style.display = 'flex';
-}
-
-async function sendDataSet(name, email, number, comment, category, wantsContact) {
-    const categories = [
-        "Zákaznická podpora", "Mobilní služby", "Internetové připojení",
-        "TV a zábava", "Prodejna Vodafone", "Fakturace a platby",
-        "Aplikace Můj Vodafone", "Jiné"
-    ];
-
-    const feedback = {
-        name:         name,
-        email:        email,
-        number:       number,
-        comment:      comment,
-        rating:       selectedRating,
-        category:     categories[category],
-        date:         new Date(),
-        wantsContact: wantsContact
-    };
-
-    try {
-        const response = await fetch("http://localhost:8080/api/user/sendFeedback", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(feedback)
-        });
-
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-        const data = await response.json();
-        console.log("Odpověď serveru:", data);
-        return data;
-
-    } catch (error) {
-        console.error("Chyba při odesílání:", error);
-        return null;
-    }
-}
+document.getElementById('contact').addEventListener('input', function () {
+    const error = validateContact(this.value.trim());
+    error ? showError('contact', error) : clearError('contact');
+});

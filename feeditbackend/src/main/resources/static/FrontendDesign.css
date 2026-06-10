@@ -1,0 +1,364 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    background: #f5f5f5;
+}
+
+/* ── HEADER / NAV STRIP ── */
+.pre-header {
+    background: #25282b;
+    height: 30px;
+    padding: 6px 15px 7px 5px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    flex-shrink: 0;
+    width: 100%;
+}
+
+.pre-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.pre-header p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.pre-header a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.vodafone-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    transition: opacity 0.15s;
+    font-weight: lighter;
+}
+
+.vodafone-link:hover {
+    opacity: 0.8;
+}
+
+.vodafone-link img {
+    width: 14px;
+    height: 14px;
+    filter: invert(1);
+}
+
+.header {
+    background: #e60000;
+    height: 74px;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    width: 100%;
+}
+
+.header img {
+    height: 47px;
+    width: auto;
+}
+
+/* ── PAGE WRAPPER ── */
+.Form-page-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ── CARD ── */
+.form {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.10);
+    width: 100%;
+    max-width: 620px;
+    margin-top: 60px;
+    margin-bottom: 60px;
+}
+
+.form-body {
+    padding: 40px 44px 44px;
+}
+
+/* ── FORM HEADER ── */
+.form-header {
+    margin-bottom: 28px;
+}
+
+.form-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 6px;
+}
+
+.form-header p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+}
+
+.required {
+    color: #e60000;
+}
+
+/* ── TWO-COLUMN ROW ── */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 4px;
+}
+
+/* ── FIELD ── */
+.field {
+    margin-bottom: 20px;
+}
+
+.field label {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 7px;
+}
+
+/* ── FIXED INPUT SYSTEM (NO JUMPING) ── */
+.field input,
+.field textarea {
+    width: 100%;
+    background: #f4f4f4;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-size: 14px;
+    color: #111;
+    outline: none;
+    font-family: inherit;
+
+    /* reserve underline space */
+    box-shadow: inset 0 -2px 0 transparent;
+
+    transition: background 0.18s, box-shadow 0.18s, border-radius 0.18s;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+    color: #aaa;
+}
+
+.field input:focus,
+.field textarea:focus {
+    background: #fff;
+    border-radius: 10px 10px 0 0;
+    box-shadow: inset 0 -2px 0 #e60000;
+}
+
+.field textarea {
+    resize: vertical;
+    min-height: 70px;
+}
+
+/* ── CATEGORY LIST ── */
+.category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.category-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f4f4f4;
+    border: 1.5px solid transparent;
+    border-radius: 10px;
+    padding: 11px 14px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    font-size: 14px;
+    color: #333;
+    user-select: none;
+}
+
+.category-option:hover {
+    background: #e6e6e6;
+    border-color: #d1d1d1;
+}
+
+.category-option.selected {
+    background: #fef0ef;
+    border-color: #e60000;
+    color: #e60000;
+    font-weight: 600;
+}
+
+.cat-icon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ── STARS ── */
+.stars {
+    display: flex;
+    gap: 6px;
+}
+
+.star {
+    font-size: 30px;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.12s, transform 0.1s;
+    line-height: 1;
+}
+
+
+.star.active {
+    color: #e8b020;
+}
+
+.star:hover {
+    color: #f4dead;
+}
+
+.star:active {
+    transform: scale(1.18);
+}
+
+/* ── CONSENT ROW ── */
+.form-row-con {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 24px;
+    cursor: pointer;
+    user-select: none;
+}
+
+#consent-check {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+#consent-check.checked {
+    border-color: #e60000;
+    background: #fef0ef;
+}
+
+.consent-text {
+    font-size: 13px;
+    color: #555;
+    line-height: 1.5;
+}
+
+/* ── SUBMIT BUTTON ── */
+.submit-button {
+    width: 100%;
+    background: linear-gradient(to right, #c60000 0%, #ff0000 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.1s;
+    font-family: inherit;
+}
+
+.submit-button:hover {
+    background: #c60000;
+}
+
+.submit-button:active {
+    transform: scale(0.985);
+}
+
+/* ── SUCCESS CARD ── */
+#success-card {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 48px 44px;
+    gap: 12px;
+}
+
+#success-card h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #111;
+}
+
+#success-card p {
+    font-size: 14px;
+    color: #666;
+    max-width: 340px;
+}
+
+.back-button {
+    margin-top: 8px;
+    background: #e60000;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 13px 32px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: inherit;
+}
+
+.back-button:hover {
+    background: #d30101;
+}
+
+/* ── FOOTER ── */
+.footer {
+    text-align: center;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    font-size: 13px;
+    color: #f2f2f2;
+    background: #25282b;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 520px) {
+    .form-body {
+        padding: 28px 20px 32px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+}

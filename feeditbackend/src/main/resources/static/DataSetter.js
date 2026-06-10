@@ -1,34 +1,11 @@
-let selectedRating = 0;
-let selectedCategory = -1;
-let consentGiven = false;
-
-function setStars(n) {
-    selectedRating = n;
-    document.querySelectorAll('.star').forEach((s, i) => {
-        s.classList.toggle('active', i < n);
-    });
-}
-
-function selectCat(el) {
-    document.querySelectorAll('.cat-option').forEach(o => o.classList.remove('selected'));
-    el.classList.add('selected');
-    selectedCategory = [...el.parentElement.children].indexOf(el);
-}
-
-function toggleConsent() {
-    consentGiven = !consentGiven;
-    document.getElementById('consent-check').classList.toggle('checked', consentGiven);
-}
-
 async function submitFeedback() {
-    const name    = document.getElementById('f-name').value.trim();
-    const contact = document.getElementById('f-contact').value.trim();
-    const comment = document.getElementById('f-comment').value.trim();
+    const name    = document.getElementById('name').value.trim();
+    const contact = document.getElementById('contact').value.trim();
+    const comment = document.getElementById('comment').value.trim();
 
-    // Rozlišení email vs telefon
-    const isEmail  = contact.includes('@');
-    const email    = isEmail ? contact : '';
-    const number   = isEmail ? '' : contact;
+    const isEmail = contact.includes('@');
+    const email   = isEmail ? contact : '';
+    const number  = isEmail ? '' : contact;
 
     if (!name || !contact || selectedCategory === -1 || selectedRating === 0) {
         alert('Vyplňte prosím jméno, kontakt, kategorii a hodnocení.');
@@ -37,20 +14,19 @@ async function submitFeedback() {
 
     await sendDataSet(name, email, number, comment, selectedCategory, consentGiven);
 
-    // Zobrazení success karty
-    document.getElementById('form-wrap').style.display = 'none';
+    document.querySelector('.form-body').style.display = 'none';
     document.getElementById('success-card').style.display = 'flex';
 }
 
-async function sendDataSet(name, gmail, number, coment, category, wantsContact) {
+async function sendDataSet(name, gmail, number, comment, category, wantsContact) {
     const feedback = {
-        name: name,
-        email: gmail,
-        number: number,
-        comment: coment,
-        rating: selectedRating,   // opravená proměnná
-        category: category,
-        date: new Date(),
+        name:         name,
+        email:        gmail,
+        number:       number,
+        comment:      comment,
+        rating:       selectedRating,
+        category:     category,
+        date:         new Date(),
         wantsContact: wantsContact
     };
 

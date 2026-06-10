@@ -2,61 +2,101 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="FrontendDesign.css">
     <title>Formular</title>
 </head>
 <body>
 
 <div class="Form-page-body">
 
-<div class="panel active" id="panel-form">
-    <div class="form-card" id="form-wrap">
-        <div class="form-header">
-            <h2>Ohodnoťte vaši zkušenost</h2>
-            <p>Pomozte nám zlepšit naše služby — zabere to méně než minutu.</p>
-        </div>
-        <div class="row2">
-            <div class="field"><label>Jméno</label><input type="text" id="f-name" placeholder="Jan Novák" /></div>
-            <div class="field"><label>E-mail nebo telefon</label><input type="text" id="f-contact" placeholder="jan@email.cz" /></div>
-        </div>
-        <div class="field">
-            <label>Co hodnotíte?</label>
-            <div class="cat-list">
-                <div class="cat-option" onclick="selectCat(this)"><div class="cat-icon"><i class="ti ti-headset" aria-hidden="true"></i> Zákaznická podpora</div><i class="ti ti-check cat-check" aria-hidden="true"></i></div>
-                <div class="cat-option" onclick="selectCat(this)"><div class="cat-icon"><i class="ti ti-signal-4g" aria-hidden="true"></i> Mobilní síť</div><i class="ti ti-check cat-check" aria-hidden="true"></i></div>
-                <div class="cat-option" onclick="selectCat(this)"><div class="cat-icon"><i class="ti ti-wifi" aria-hidden="true"></i> Internetové připojení</div><i class="ti ti-check cat-check" aria-hidden="true"></i></div>
-                <div class="cat-option" onclick="selectCat(this)"><div class="cat-icon"><i class="ti ti-receipt" aria-hidden="true"></i> Fakturace</div><i class="ti ti-check cat-check" aria-hidden="true"></i></div>
-                <div class="cat-option" onclick="selectCat(this)"><div class="cat-icon"><i class="ti ti-device-mobile" aria-hidden="true"></i> Aplikace</div><i class="ti ti-check cat-check" aria-hidden="true"></i></div>
-                <div class="cat-option" onclick="selectCat(this)"><div class="cat-icon"><i class="ti ti-shopping-cart" aria-hidden="true"></i> Prodej a aktivace</div><i class="ti ti-check cat-check" aria-hidden="true"></i></div>
-                <div class="cat-option" onclick="selectCat(this)"><div class="cat-icon"><i class="ti ti-tools" aria-hidden="true"></i> Technická závada</div><i class="ti ti-check cat-check" aria-hidden="true"></i></div>
-                <div class="cat-option" onclick="selectCat(this)"><div class="cat-icon"><i class="ti ti-file-text" aria-hidden="true"></i> Smlouva a tarify</div><i class="ti ti-check cat-check" aria-hidden="true"></i></div>
-                <div class="cat-option" onclick="selectCat(this)"><div class="cat-icon"><i class="ti ti-dots-circle-horizontal" aria-hidden="true"></i> Jiné</div><i class="ti ti-check cat-check" aria-hidden="true"></i></div>
-            </div>
-        </div>
-        <div class="field">
-            <label>Hodnocení</label>
-            <div class="stars" id="stars">
-                <span class="star" onclick="setStars(1)">★</span>
-                <span class="star" onclick="setStars(2)">★</span>
-                <span class="star" onclick="setStars(3)">★</span>
-                <span class="star" onclick="setStars(4)">★</span>
-                <span class="star" onclick="setStars(5)">★</span>
-            </div>
-        </div>
-        <div class="field"><label>Komentář (nepovinné)</label><textarea id="f-comment" placeholder="Popište vaši zkušenost..."></textarea></div>
-        <div class="consent-row" onclick="toggleConsent()">
-            <div class="consent-check" id="consent-check"><i class="ti ti-check" aria-hidden="true"></i></div>
-            <div class="consent-text">Souhlasím s tím, aby mě Vodafone kontaktoval ohledně mé zpětné vazby.</div>
-        </div>
-        <button class="submit-btn" onclick="submitFeedback()"><i class="ti ti-send" aria-hidden="true"></i> Odeslat hodnocení</button>
+    <div class="pre-header">
+        <a href="https://www.vodafone.cz" target="_blank" class="vodafone-link">
+            <img src="https://files.catbox.moe/y23a1r.png" alt="Home">
+            <span>Přejít na Vodafone</span>
+        </a>
     </div>
-    <div class="success-card" id="success-card">
-        <div class="success-icon"><i class="ti ti-check" aria-hidden="true"></i></div>
-        <h3>Děkujeme!</h3>
-        <p>Vaše zpětná vazba byla odeslána. Váží si jí celý náš tým.</p>
-        <button class="back-btn" onclick="sendDataSet()">Odeslat další hodnocení</button>
+    <div class="header">
+        <img src="https://files.catbox.moe/wmef1f.png" id="logo"  alt="FeedIt logo">
     </div>
-</div>
+
+    <div class="form">
+        <div class="form-body">
+            <div class="form-header">
+                <h2>Ohodnoťte vaši zkušenost</h2>
+                <p>Pomozte nám zlepšit naše služby. Zabere to méně než minutu.</p>
+                <p>Políčka označená <span class="required">*</span> jsou povinná.</p>
+            </div>
+            <div class="form-row">
+                <div class="field">
+                    <label>Jméno a příjmení<span class="required">*</span></label>
+                    <input type="text" id="name" placeholder="Zadejte svoje jméno" />
+                </div>
+
+                <div class="field">
+                    <label>E-mail nebo telefon<span class="required">*</span></label>
+                    <input type="text" id="contact" placeholder="Zadejte svoje cislo nebo e-mail" />
+                </div>
+            </div>
+            <div class="field">
+                <label>Co hodnotíte?<span class="required">*</span></label>
+                <div class="category-list">
+                    <div class="category-option" onclick="selectCategory(this)">
+                        <div class="cat-icon"><i></i> Zákaznická podpora</div><i></i>
+                    </div>
+                    <div class="category-option" onclick="selectCategory(this)">
+                        <div class="cat-icon"><i></i> Mobilní služby</div><i></i>
+                    </div>
+                    <div class="category-option" onclick="selectCategory(this)">
+                        <div class="cat-icon"><i></i> Internetové připojení</div><i></i>
+                    </div>
+                    <div class="category-option" onclick="selectCategory(this)">
+                        <div class="cat-icon"><i></i> TV a zábava</div><i></i>
+                    </div>
+                    <div class="category-option" onclick="selectCategory(this)">
+                        <div class="cat-icon"><i></i> Prodejna Vodafone</div><i></i>
+                    </div>
+                    <div class="category-option" onclick="selectCategory(this)">
+                        <div class="cat-icon"><i></i> Fakturace a platby</div><i></i>
+                    </div>
+                    <div class="category-option" onclick="selectCategory(this)">
+                        <div class="cat-icon"><i></i> Aplikace Můj Vodafone</div><i></i>
+                    </div>
+                    <div class="category-option" onclick="selectCategory(this)">
+                        <div class="cat-icon"><i></i>Jiné</div><i></i>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <label>Hodnocení<span class="required">*</span></label>
+                <div class="stars" id="stars">
+                    <span class="star" onclick="setStars(1)">★</span>
+                    <span class="star" onclick="setStars(2)">★</span>
+                    <span class="star" onclick="setStars(3)">★</span>
+                    <span class="star" onclick="setStars(4)">★</span>
+                    <span class="star" onclick="setStars(5)">★</span>
+                </div>
+            </div>
+            <div class="field"><label>Komentář</label><textarea id="comment" placeholder="Popište vaši zkušenost..."></textarea></div>
+            <div class="form-row-con" onclick="toggleConsent()">
+                <div class="consent-check" id="consent-check"><span class="checkmark"></span></div>
+                <div class="consent-text">Souhlasím s tím, aby mě Vodafone kontaktoval ohledně mé zpětné vazby.</div>
+            </div>
+            <button class="submit-button" onclick="submitFeedback()"><i></i> Odeslat hodnocení</button>
+        </div>
+        <div class="success-card" id="success-card">
+            <div class="success-icon"><i></i></div>
+            <h3>Děkujeme!</h3>
+            <p>Vaše zpětná vazba byla odeslána. Váží si jí celý náš tým.</p>
+            <button class="back-button" onclick="resetForm()">Odeslat další hodnocení</button>
+        </div>
+    </div>
 </div>
 
+<div class="footer">
+    <p>Copyright © 2026 Feed It technologie Vodafone</p>
+</div>
+
+<script src="FormPage.js"></script>
+<script src="DataSetter.js"></script>
 </body>
 </html>

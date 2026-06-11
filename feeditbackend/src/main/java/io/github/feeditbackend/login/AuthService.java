@@ -1,10 +1,15 @@
 package io.github.feeditbackend.login;
 
 
-import org.mindrot.jbcrypt.BCrypt;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
-import java.io.*;
-import java.util.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class AuthService {
 
@@ -21,19 +26,15 @@ public class AuthService {
                     return "USER EXISTS";
                 }
             }
-
-            FileWriter fw = new FileWriter(FILE, true);
-
-            if (new File(FILE).length() == 0) {
-                fw.write("username,email,password\n");
+    
+            try (FileWriter fw = new FileWriter(FILE, true)) {
+                String hash = BCrypt.hashpw(password, BCrypt.gensalt());
+                fw.write(username + "," + email + "," + hash + "," +  "false" + "\n");
             }
-            String hash = BCrypt.hashpw(password, BCrypt.gensalt());
-            fw.write(username + "," + email + "," + hash + "," +  "false" + "\n");
-            fw.close();
 
             return "REGISTER OK";
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             return "ERROR: " + e.getMessage();
         }
     }
@@ -63,7 +64,7 @@ public class AuthService {
 
             return "USER NOT FOUND";
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             return "ERROR";
         }
     }
@@ -72,19 +73,28 @@ public class AuthService {
     private List<String[]> readCSV() throws FileNotFoundException {
 
         File file = new File(FILE);
-
-        Scanner sc = new Scanner(file);
-
-        List<String[]> data = new ArrayList<String[]>();
-        String line = "";
-
-        while (sc.hasNextLine()) {
-            line = sc.nextLine();
-            data.add(line.split(","));
-            System.out.println(line);
+        if(!file.exists()) {
+            try {
+                file.createNewFile();
+                try (FileWriter fw = new FileWriter(FILE, true)) {
+                    if(file.length() == 0) {
+                        fw.write("username,email,password,isAdmin\n");
+                    }
+                }
+            } 
+            catch (IOException e) {}
         }
 
-        sc.close();
+        List<String[]> data;
+        try (Scanner sc = new Scanner(file)) {
+            data = new ArrayList<>();
+            String line;
+            while (sc.hasNextLine()) {
+                line = sc.nextLine();
+                data.add(line.split(","));
+                System.out.println(line);
+            }
+        }
         return data;
     }
 }

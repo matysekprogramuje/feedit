@@ -1,5 +1,3 @@
-// ── VALIDATION HELPERS ──────────────────────────────────────────────
-
 function showError(fieldId, message) {
     const field = document.getElementById(fieldId).closest(".field") ||
         document.getElementById(fieldId).parentElement;
@@ -19,10 +17,10 @@ function clearError(fieldId) {
     if (existing) existing.remove();
 }
 
-// Unicode-aware: letters from all scripts, hyphens, apostrophes, spaces allowed
+
 function validateName(value) {
     if (value.length < 2) return "Jméno musí mít alespoň 2 znaky.";
-    // Reject anything that isn't a letter (any language), space, hyphen, or apostrophe
+
     if (/[^\p{L}\s'\-]/u.test(value)) return "Jméno smí obsahovat pouze písmena.";
     return null;
 }
@@ -30,8 +28,7 @@ function validateName(value) {
 function validateContact(value) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-    // Phone: optional leading +, then digits, spaces, hyphens, parentheses
-    // Must be 7–15 digits total (E.164 range)
+
     const phoneDigits = value.replace(/[\s\-().+]/g, "");
     const phoneRegex = /^\+?[\d\s\-().]{7,20}$/;
     const onlyDigits = /^\d{7,15}$/.test(phoneDigits);
@@ -46,7 +43,6 @@ function validateContact(value) {
     return null;
 }
 
-// ── SUBMIT GUARD ─────────────────────────────────────────────────────
 
 let formInteracted = false;
 
@@ -91,7 +87,6 @@ function updateSubmitState() {
     }
 }
 
-// ── LIVE VALIDATION (on blur) ────────────────────────────────────────
 
 document.getElementById("name").addEventListener("blur", function () {
     formInteracted = true;
@@ -125,7 +120,7 @@ document.getElementById("contact").addEventListener("input", function () {
     updateSubmitState();
 });
 
-// Watch category and stars for real-time state updates
+
 document.querySelectorAll(".category-option").forEach(opt => {
     opt.addEventListener("click", updateSubmitState);
 });
@@ -134,7 +129,6 @@ document.querySelectorAll(".star").forEach(star => {
     star.addEventListener("click", updateSubmitState);
 });
 
-// Intercept the button: show error message on first attempt, block if invalid
 document.querySelector(".submit-button").addEventListener("click", function (e) {
     formInteracted = true;
     const error = getSubmitError();
@@ -144,4 +138,4 @@ document.querySelector(".submit-button").addEventListener("click", function (e) 
         return;
     }
     setSubmitError(null);
-}, true); // capture phase — fires before the inline onclick
+}, true);

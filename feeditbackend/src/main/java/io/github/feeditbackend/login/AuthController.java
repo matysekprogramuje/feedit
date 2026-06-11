@@ -1,29 +1,23 @@
 package io.github.feeditbackend.login;
 
+
+
+
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
 @RestController
+@CrossOrigin
 public class AuthController {
 
-    AuthService service = new AuthService();
+    private final AuthService service = new AuthService();
 
-    @GetMapping("/")
-    public String home() {
-        return "Backend bezi";
+    @PostMapping("/auth/login")
+    public String login(@RequestBody AuthRequest req) {
+        return service.login(req.username, req.password);
     }
 
-    @PostMapping("/auth")
-    public String auth(@RequestBody AuthRequest req) {
-
-        if (req.type.equals("register")) {
-            return service.register(req.username, req.email, req.password);
-        }
-
-        if (req.type.equals("login")) {
-            return service.login(req.username, req.password);
-        }
-
-        return "INVALID";
+    @PostMapping("/auth/register")
+    public String register(@RequestBody AuthRequest req) {
+        return service.register(req.username, req.email, req.password);
     }
 }

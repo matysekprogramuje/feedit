@@ -5,7 +5,7 @@ import java.util.*;
 
 public class AuthService {
 
-    private final String FILE = "loginData.csv";
+    private final String FILE = "feeditbackend/src/main/java/io/github/feeditbackend/login/loginData.csv";
 
     // REGISTER
     public String register(String username, String email, String password) {
@@ -40,12 +40,17 @@ public class AuthService {
 
         try {
             List<String[]> users = readCSV();
+            System.out.println(users.size());
 
-            for (String[] u : users) {
 
-                if (u[0].equals(username)) {
+            for (String[] user : users) {
 
-                    if (u[2].equals(password)) {
+                String storedUsername = user[0];
+                String storedPassword = user[2];
+
+                if (storedUsername.equalsIgnoreCase(username)) {
+
+                    if (storedPassword.equals(password)) {
                         return "LOGIN OK";
                     } else {
                         return "WRONG PASSWORD";
@@ -56,37 +61,27 @@ public class AuthService {
             return "USER NOT FOUND";
 
         } catch (Exception e) {
-            return "ERROR: " + e.getMessage();
+            return "ERROR";
         }
     }
 
     // READ CSV
-    private List<String[]> readCSV() throws IOException {
+    private List<String[]> readCSV() throws FileNotFoundException {
 
         File file = new File(FILE);
 
-        if (!file.exists()) file.createNewFile();
-
-        BufferedReader br = new BufferedReader(new FileReader(file));
+        Scanner sc = new Scanner(file);
 
         List<String[]> data = new ArrayList<String[]>();
-        String line;
+        String line = "";
 
-        boolean first = true;
-
-        while ((line = br.readLine()) != null) {
-
-            if (first && line.startsWith("username")) {
-                first = false;
-                continue;
-            }
-
-            first = false;
-
+        while (sc.hasNextLine()) {
+            line = sc.nextLine();
             data.add(line.split(","));
+            System.out.println(line);
         }
 
-        br.close();
+        sc.close();
         return data;
     }
 }

@@ -35,9 +35,9 @@ public class Data {
         try {
             newDB.createNewFile();
 
-            FileWriter fw = new FileWriter(new File(newDB.getAbsolutePath()), true);
-            fw.write("name|email|number|comment|rating|category|date|wantsContact|resolved");
-            fw.close();
+            try (FileWriter fw = new FileWriter(new File(newDB.getAbsolutePath()), true)) {
+                fw.write("name|email|number|comment|rating|category|date|wantsContact|resolved");
+            }
         } 
         catch (IOException e) {
             System.out.println("ERROR: Writing to the new feedback databse failed");

@@ -25,7 +25,7 @@ public class AuthService {
                 fw.write("username,email,password\n");
             }
 
-            fw.write(username + "," + email + "," + password + "\n");
+            fw.write(username + "," + email + "," + password + "," +  "false" + "\n");
             fw.close();
 
             return "REGISTER OK";

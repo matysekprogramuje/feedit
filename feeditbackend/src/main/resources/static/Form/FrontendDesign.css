@@ -10,13 +10,9 @@ body {
     display: flex;
     flex-direction: column;
     background:
-            radial-gradient(circle at left center,
-            #ffefef,
-            transparent 50%),
-
             radial-gradient(circle at bottom right,
-            #ffefef,
-            transparent 50%),
+            #ffe5e5,
+            transparent 70%),
 
             #fafafa;
 }

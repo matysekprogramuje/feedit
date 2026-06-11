@@ -1,5 +1,8 @@
 package io.github.feeditbackend.login;
 
+
+import org.mindrot.jbcrypt.BCrypt;
+
 import java.io.*;
 import java.util.*;
 
@@ -24,8 +27,8 @@ public class AuthService {
             if (new File(FILE).length() == 0) {
                 fw.write("username,email,password\n");
             }
-
-            fw.write(username + "," + email + "," + password + "," +  "false" + "\n");
+            String hash = BCrypt.hashpw(password, BCrypt.gensalt());
+            fw.write(username + "," + email + "," + hash + "," +  "false" + "\n");
             fw.close();
 
             return "REGISTER OK";
@@ -50,7 +53,7 @@ public class AuthService {
 
                 if (storedUsername.equalsIgnoreCase(username)) {
 
-                    if (storedPassword.equals(password)) {
+                    if (BCrypt.checkpw(password, storedPassword)) {
                         return "LOGIN OK";
                     } else {
                         return "WRONG PASSWORD";

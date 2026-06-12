@@ -5,195 +5,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrace – FeedIt</title>
     <link rel="stylesheet" href="../Form/FrontendDesign.css">
-    <script src="script.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 </head>
 <body>
+
 <div class="Form-page-body">
-<div class="pre-header">
-    <a href="https://www.vodafone.cz" target="_blank" class="vodafone-link">
-        <img src="https://files.catbox.moe/y23a1r.png" alt="Home">
-        <span data-i18n="go_vodafone">Přejít na Vodafone</span>
-    </a>
 
-
-    <div class="lang-switch">
-        <button onclick="setLang('cs')">🇨🇿</button>
-        <button onclick="setLang('en')">🇺🇸</button>
+    <div class="pre-header">
+        <a href="https://www.vodafone.cz" target="_blank" class="vodafone-link">
+            <img src="https://files.catbox.moe/y23a1r.png" alt="Home">
+            <span>Přejít na Vodafone</span>
+        </a>
     </div>
-</div>
+    <div class="header">
+        <img src="https://files.catbox.moe/wmef1f.png" id="logo" alt="FeedIt logo">
+    </div>
 
-<div class="header">
-    <img src="https://files.catbox.moe/wmef1f.png" id="logo" alt="FeedIt logo">
-</div>
+    <div class="form">
 
-<div class="form">
+        <div class="form-body" id="form-section">
+            <div class="form-header">
+                <h2>Vytvořte si účet</h2>
+                <p>Registrace trvá méně než minutu.</p>
+                <p>Políčka označená <span class="required">*</span> jsou povinná.</p>
+            </div>
 
-    <div class="form-body" id="form-section">
-        <div class="form-header">
-            <h2 data-i18n="register_title">Vytvořte si účet</h2>
-
-            <p data-i18n="register_subtitle">
-                Registrace trvá méně než minutu.
-            </p>
-
-            <p data-i18n="required_fields_text">
-                Políčka označená <span class="required">*</span> jsou povinná.
-            </p>
-        </div>
-
-        <div class="form-row">
-            <div class="field">
-                <label data-i18n="full_name_label">
-                    Jméno a příjmení <span class="required">*</span>
-                </label>
-
-                <input
-                        type="text"
-                        id="f-name"
-                        placeholder="Jan Novák"
-                        data-i18n-placeholder="full_name_placeholder" />
+            <div class="form-row">
+                <div class="field">
+                    <label>Jméno a příjmení <span class="required">*</span></label>
+                    <input type="text" id="f-name" placeholder="Jan Novák" />
+                </div>
+                <div class="field">
+                    <label>Telefon</label>
+                    <input type="tel" id="f-phone" placeholder="+420 123 456 789" />
+                </div>
             </div>
 
             <div class="field">
-                <label data-i18n="phone_label">Telefon</label>
+                <label>E-mail <span class="required">*</span></label>
+                <input type="email" id="f-email" placeholder="jan@email.cz" />
+            </div>
 
-                <input
-                        type="tel"
-                        id="f-phone"
-                        placeholder="+420 123 456 789"
-                        data-i18n-placeholder="phone_placeholder" />
+            <div class="field">
+                <label>Heslo <span class="required">*</span></label>
+                <div class="pw-wrap">
+                    <input type="password" id="f-pw" placeholder="••••••••" oninput="updateStrength(this.value)" />
+                    <button class="pw-toggle" onclick="togglePw('f-pw', this)" type="button" aria-label="Zobrazit heslo">
+                        <i class="ti ti-eye"></i>
+                    </button>
+                </div>
+                <div class="pw-strength" id="pw-strength">
+                    <div class="pw-bar" id="b1"></div>
+                    <div class="pw-bar" id="b2"></div>
+                    <div class="pw-bar" id="b3"></div>
+                    <div class="pw-bar" id="b4"></div>
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Potvrzení hesla <span class="required">*</span></label>
+                <div class="pw-wrap">
+                    <input type="password" id="f-pw2" placeholder="••••••••" />
+                    <button class="pw-toggle" onclick="togglePw('f-pw2', this)" type="button" aria-label="Zobrazit heslo">
+                        <i class="ti ti-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-row-con" onclick="toggleConsent()">
+                <div class="consent-check" id="chk"><span class="checkmark"></span></div>
+                <div class="consent-text">
+                    Souhlasím se <a href="#">zpracováním osobních údajů</a> a <a href="#">obchodními podmínkami</a> Vodafone.
+                </div>
+            </div>
+
+            <button class="submit-button" onclick="submitForm()">
+                <i class="ti ti-user-plus"></i> Registrovat se
+            </button>
+
+            <div class="login-link">
+                Máte již účet? <a href="#">Přihlásit se</a>
             </div>
         </div>
 
-        <div class="field">
-            <label data-i18n="email_label">
-                E-mail <span class="required">*</span>
-            </label>
-
-            <input
-                    type="email"
-                    id="f-email"
-                    placeholder="jan@email.cz"
-                    data-i18n-placeholder="email_placeholder" />
+        <div id="success-section" class="success-card">
+            <div class="success-icon"><i class="ti ti-check"></i></div>
+            <h3>Vítejte!</h3>
+            <p>Váš účet byl úspěšně vytvořen. Můžete se nyní přihlásit.</p>
+            <button class="back-button" onclick="resetForm()">Zpět na registraci</button>
         </div>
 
-        <div class="field">
-            <label data-i18n="password_label">
-                Heslo <span class="required">*</span>
-            </label>
-
-            <div class="pw-wrap">
-                <input
-                        type="password"
-                        id="f-pw"
-                        placeholder="••••••••"
-                        data-i18n-placeholder="password_placeholder"
-                        oninput="updateStrength(this.value)" />
-
-                <button
-                        class="pw-toggle"
-                        onclick="togglePw('f-pw', this)"
-                        type="button"
-                        aria-label="Zobrazit heslo"
-                        data-i18n-aria-label="show_password">
-
-                    <i class="ti ti-eye"></i>
-                </button>
-            </div>
-
-            <div class="pw-strength" id="pw-strength">
-                <div class="pw-bar" id="b1"></div>
-                <div class="pw-bar" id="b2"></div>
-                <div class="pw-bar" id="b3"></div>
-                <div class="pw-bar" id="b4"></div>
-            </div>
-        </div>
-
-        <div class="field">
-            <label data-i18n="confirm_password_label">
-                Potvrzení hesla <span class="required">*</span>
-            </label>
-
-            <div class="pw-wrap">
-                <input
-                        type="password"
-                        id="f-pw2"
-                        placeholder="••••••••"
-                        data-i18n-placeholder="confirm_password_placeholder" />
-
-                <button
-                        class="pw-toggle"
-                        onclick="togglePw('f-pw2', this)"
-                        type="button"
-                        aria-label="Zobrazit heslo"
-                        data-i18n-aria-label="show_password">
-
-                    <i class="ti ti-eye"></i>
-                </button>
-            </div>
-        </div>
-
-        <div class="form-row-con" onclick="toggleConsent()">
-            <div class="consent-check" id="chk">
-                <span class="checkmark"></span>
-            </div>
-
-            <div class="consent-text" data-i18n="consent_text">
-                Souhlasím se
-                <a href="#">zpracováním osobních údajů</a>
-                a
-                <a href="#">obchodními podmínkami</a>
-                Vodafone.
-            </div>
-        </div>
-
-        <button
-                class="submit-button"
-                onclick="submitForm()"
-                data-i18n="register_button">
-
-            <i class="ti ti-user-plus"></i> Registrovat se
-        </button>
-
-        <div class="login-link">
-            <span data-i18n="already_have_account">
-                Máte již účet?
-            </span>
-
-            <a href="#" data-i18n="login_link">
-                Přihlásit se
-            </a>
-        </div>
     </div>
-
-    <div id="success-section" class="success-card">
-        <div class="success-icon">
-            <i class="ti ti-check"></i>
-        </div>
-
-        <h3 data-i18n="success_title">
-            Vítejte!
-        </h3>
-
-        <p data-i18n="success_message">
-            Váš účet byl úspěšně vytvořen. Můžete se nyní přihlásit.
-        </p>
-
-        <button
-                class="back-button"
-                onclick="resetForm()"
-                data-i18n="back_to_registration">
-
-            Zpět na registraci
-        </button>
-    </div>
-
 </div>
 
 <div class="footer">
-    <p data-i18n="footer_copyright">
-        Copyright © 2026 Feed It technologie Vodafone
-    </p>
+    <p>Copyright © 2026 Feed It technologie Vodafone</p>
 </div>
-</div>
+
+<script src="script.js"></script>
+</body>
+</html>

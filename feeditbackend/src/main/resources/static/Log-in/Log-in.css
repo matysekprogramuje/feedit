@@ -433,26 +433,3 @@ body{
     resize: vertical;
     min-height: 70px;
 }
-
-
-
-.lang-switch {
-    margin-left: auto;
-    display: flex;
-    gap: 6px;
-}
-
-.lang-switch button {
-    font-size: 11px;
-    padding: 3px 8px;
-    border: 1px solid #afafaf;
-    background: transparent;
-    color: #838383;
-    cursor: pointer;
-    border-radius: 3px;
-}
-
-.lang-switch button:hover {
-    background: #818181;
-    color: black;
-}

@@ -1,66 +1,26 @@
-/* ==================================
-   CONFIG
-================================== */
-
-const API_BASE = "http://localhost:8080/api";
-
-const CATEGORY_NAMES = [
-    "Zákaznická podpora",    // 0
-    "Mobilní služby",        // 1
-    "Internetové připojení", // 2
-    "TV a zábava",           // 3
-    "Prodejna Vodafone",     // 4
-    "Fakturace a platby",    // 5
-    "Aplikace Můj Vodafone", // 6
-    "Jiné",                  // 7
-];
-
-function getCategoryName(index) {
-    return CATEGORY_NAMES[index] ?? `Kategorie ${index}`;
-}
-
-/* ==================================
-   STATE
-================================== */
+const API_BASE = "/api";
 
 let feedbackData   = [];
-let activeCategory = "Vše";
+let activeCategory = "all";
 let activeSort     = "date";
 
-/* ==================================
-   HELPERS
-================================== */
-
 function getInitials(name) {
-    return name
-        .split(" ")
-        .map(w => w[0])
-        .join("")
-        .substring(0, 2)
-        .toUpperCase();
+    return (name || "?").split(" ").map(w => w[0]).join("").substring(0, 2).toUpperCase();
 }
-
-function starsHTML(rating) {
-    let html = "";
-    for (let i = 1; i <= 5; i++) html += i <= rating ? "★" : "☆";
-    return html;
+function starsHTML(r) {
+    let h = "";
+    for (let i = 1; i <= 5; i++) h += i <= r ? "★" : "☆";
+    return h;
 }
-
-function formatDate(dateString) {
-    return new Date(dateString).toLocaleDateString("cs-CZ");
+function formatDate(d) {
+    return new Date(d).toLocaleDateString("cs-CZ");
 }
-
-/* ==================================
-   FETCH FROM BACKEND
-================================== */
 
 async function loadFeedback() {
     try {
-        // resolved=false → vrátí nevyřešené; bez filtru rating/category
-        const response = await fetch(`${API_BASE}/admin/getFeedback?resolved=false`);
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-        const raw = await response.json();
+        const res = await fetch(`${API_BASE}/admin/getFeedback`);
+        if (!res.ok) throw new Error(res.status);
+        const raw = await res.json();
 
         feedbackData = raw.map(item => ({
             name:             item.name,
@@ -68,116 +28,79 @@ async function loadFeedback() {
             number:           item.number,
             comment:          item.comment,
             rating:           item.rating,
-            category:         getCategoryName(item.category),
+            categoryIndex:    item.category,
             date:             item.date,
             contactRequested: item.wantsContact,
             resolved:         item.resolved,
         }));
-
     } catch (err) {
         console.error("Chyba při načítání feedbacku:", err);
         feedbackData = [];
     }
-
-    await loadStats();
     renderStats();
     render();
 }
 
-async function loadStats() {
-    try {
-        const [amountRes, ratingRes] = await Promise.all([
-            fetch(`${API_BASE}/admin/getAmount`),
-            fetch(`${API_BASE}/admin/getTotalRating`),
-        ]);
-
-        const total  = await amountRes.text();
-        const avgRaw = await ratingRes.text();
-
-        document.getElementById("s-total").textContent = total;
-        document.getElementById("s-avg").textContent   = parseFloat(avgRaw).toFixed(1);
-
-    } catch (err) {
-        console.error("Chyba při načítání statistik:", err);
-    }
-}
-
-/* ==================================
-   STATS
-================================== */
-
 function renderStats() {
-    const critical        = feedbackData.filter(f => f.rating <= 2).length;
-    const contactRequests = feedbackData.filter(f => f.contactRequested).length;
+    const total = feedbackData.length;
+    const avg   = total ? (feedbackData.reduce((s, f) => s + f.rating, 0) / total).toFixed(1) : "0.0";
 
-    document.getElementById("s-neg").textContent     = critical;
-    document.getElementById("s-contact").textContent = contactRequests;
+    document.getElementById("s-total").textContent   = total;
+    document.getElementById("s-avg").textContent     = avg;
+    document.getElementById("s-neg").textContent     = feedbackData.filter(f => f.rating <= 2).length;
+    document.getElementById("s-contact").textContent = feedbackData.filter(f => f.contactRequested).length;
 }
-
-/* ==================================
-   CATEGORY FILTERS
-================================== */
 
 function renderCategories() {
+    const cats    = categoryTranslations[lang];
+    const allText = adminTexts[lang].all;
+    const used    = new Set(feedbackData.map(f => f.categoryIndex));
+
     const container = document.getElementById("cat-tabs");
-
-    const categories = ["Vše", ...new Set(feedbackData.map(f => f.category))];
-
-    container.innerHTML = categories
-        .map(cat => `
-            <button class="cat-btn ${activeCategory === cat ? "active" : ""}"
-                    onclick="setCategory('${cat}')">
-                ${cat}
-            </button>
-        `)
-        .join("");
+    container.innerHTML = [
+        `<button class="cat-btn ${activeCategory === 'all' ? 'active' : ''}" onclick="setCategory('all')">${allText}</button>`,
+        ...[...used].map(i =>
+            `<button class="cat-btn ${activeCategory === String(i) ? 'active' : ''}" onclick="setCategory('${i}')">${cats[i] ?? i}</button>`
+        )
+    ].join("");
 }
 
-function setCategory(category) {
-    activeCategory = category;
+function setCategory(cat) {
+    activeCategory = cat;
     render();
 }
 
-/* ==================================
-   SORTING
-================================== */
-
-function setSort(sortType) {
-    activeSort = sortType;
-
-    document.querySelectorAll(".sort-btn").forEach(btn => btn.classList.remove("active"));
-
+function setSort(s) {
+    activeSort = s;
+    document.querySelectorAll(".sort-btn").forEach(b => b.classList.remove("active"));
     const map = { date: "btn-date", "stars-desc": "btn-stars-desc", "stars-asc": "btn-stars-asc" };
-    document.getElementById(map[sortType])?.classList.add("active");
-
+    document.getElementById(map[s])?.classList.add("active");
     render();
 }
-
-/* ==================================
-   CARDS
-================================== */
 
 function renderCards(data) {
     const container  = document.getElementById("cards");
     const emptyState = document.getElementById("empty-state");
+    const cats       = categoryTranslations[lang];
+    const texts      = adminTexts[lang];
 
-    if (data.length === 0) {
+    if (!data.length) {
         container.innerHTML      = "";
         emptyState.style.display = "block";
         return;
     }
-
     emptyState.style.display = "none";
 
-    container.innerHTML = data.map(item => `
+    container.innerHTML = data.map(item => {
+        const catName = cats[item.categoryIndex] ?? `Kategorie ${item.categoryIndex}`;
+        return `
         <div class="feedback-card">
-
             <div class="card-top">
                 <div class="user">
                     <div class="avatar">${getInitials(item.name)}</div>
                     <div>
                         <h4>${item.name}</h4>
-                        <div class="category">${item.category}</div>
+                        <div class="category">${catName}</div>
                     </div>
                 </div>
                 <div class="rating">
@@ -185,61 +108,104 @@ function renderCards(data) {
                     <div class="stars">${starsHTML(item.rating)}</div>
                 </div>
             </div>
-
-            <div class="comment">${item.comment || "<em>Bez komentáře</em>"}</div>
-
+            <div class="comment">${item.comment || `<em>${texts.noComment}</em>`}</div>
             <div class="badges">
-                ${item.rating <= 2 ? `<span class="badge badge-warning">Priority</span>` : ""}
-                ${item.contactRequested ? `<span class="badge badge-contact">Contact Requested</span>` : ""}
+                ${item.rating <= 2 ? `<span class="badge badge-warning">${texts.priority}</span>` : ""}
+                ${item.contactRequested ? `<span class="badge badge-contact">${texts.contactRequested}</span>` : ""}
             </div>
-
             <div class="card-footer">
                 <span>${formatDate(item.date)}</span>
                 <span>${item.email || item.number || ""}</span>
             </div>
-
-        </div>
-    `).join("");
+        </div>`;
+    }).join("");
 }
 
-/* ==================================
-   MAIN RENDER
-================================== */
+function exportCSV() {
+    const cats = categoryTranslations[lang];
+    const rows = [
+        ["Jméno","E-mail","Telefon","Komentář","Hodnocení","Kategorie","Datum","Kontakt","Vyřešeno"],
+        ...feedbackData.map(f => [
+            f.name, f.email, f.number, `"${(f.comment||"").replace(/"/g,'""')}"`,
+            f.rating, cats[f.categoryIndex] ?? f.categoryIndex,
+            f.date, f.contactRequested, f.resolved
+        ])
+    ];
+    const csv  = rows.map(r => r.join(";")).join("\n");
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement("a");
+    a.href     = url;
+    a.download = `feedit-export-${new Date().toISOString().split("T")[0]}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
 
 function render() {
     let filtered = [...feedbackData];
-
     const search = document.getElementById("search-input").value.toLowerCase();
+    const cats   = categoryTranslations[lang];
 
     if (search) {
         filtered = filtered.filter(f =>
-            f.name.toLowerCase().includes(search)     ||
-            f.comment.toLowerCase().includes(search)  ||
-            f.category.toLowerCase().includes(search)
+            (f.name    || "").toLowerCase().includes(search) ||
+            (f.comment || "").toLowerCase().includes(search) ||
+            (cats[f.categoryIndex] || "").toLowerCase().includes(search)
         );
     }
 
-    if (activeCategory !== "Vše") {
-        filtered = filtered.filter(f => f.category === activeCategory);
+    if (activeCategory !== "all") {
+        filtered = filtered.filter(f => String(f.categoryIndex) === activeCategory);
     }
 
     if (activeSort === "stars-desc") filtered.sort((a, b) => b.rating - a.rating);
     if (activeSort === "stars-asc")  filtered.sort((a, b) => a.rating - b.rating);
     if (activeSort === "date")       filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    document.getElementById("results-info").textContent = `${filtered.length} reviews`;
+    const reviewsWord = adminTexts[lang].reviews;
+    document.getElementById("results-info").textContent = `${filtered.length} ${reviewsWord}`;
 
     renderCategories();
     renderCards(filtered);
 }
 
-/* ==================================
-   INIT
-================================== */
+function applyLanguage() {
+    const t  = translations[lang];
+    const at = adminTexts[lang];
+
+    setText("cusFeedbackManage",     t.cusFeedbackManage);
+    setText("customerFeedback",      t.customerFeedback);
+    setText("adminDescription",      t.adminDescription);
+    setText("lbl-export",            t.export);
+    setText("lbl-refresh",           t.refresh);
+    setText("totalFeedback",         t.totalFeedback);
+    setText("submittedReviews",      t.submittedReviews);
+    setText("averageRating",         t.averageRating);
+    setText("customerSatisfaction",  t.customerSatisfaction);
+    setText("criticalReviews",       t.criticalReviews);
+    setText("requiresAttention",     t.requiresAttention);
+    setText("contactRequests",       t.contactRequests);
+    setText("awaitingResponse",      t.awaitingResponse);
+    setText("lbl-latest",            t.latest);
+    setText("lbl-highestRated",      t.highestRated);
+    setText("lbl-lowestRated",       t.lowestRated);
+    setText("lbl-feedbackTitle",     t.customerFeedback);
+    setText("feedbackReviewAndManage", t.feedbackReviewAndManage);
+    setText("noFeedback",            t.noFeedback);
+    setText("tryDifferentSearch",    t.tryDifferentSearch);
+    setPlaceholder("search-input",   t.searchPlaceholder);
+
+    const user = sessionStorage.getItem("feedit-user");
+    if (user) {
+        setText("user-name", user);
+        setText("user-avatar", user.substring(0, 2).toUpperCase());
+    }
+
+    render();
+}
 
 document.addEventListener("DOMContentLoaded", () => {
-    const refreshBtn = document.querySelector(".action-btn.primary");
-    if (refreshBtn) refreshBtn.addEventListener("click", loadFeedback);
-
+    mountLangSwitcher();
+    applyLanguage();
     loadFeedback();
 });

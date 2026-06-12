@@ -5,7 +5,7 @@ import java.util.*;
 
 public class AuthService {
 
-    private final String FILE = "feeditbackend/src/main/java/io/github/feeditbackend/login/loginData.csv";
+    private final String FILE = "loginData.csv";
 
     // REGISTER
     public String register(String username, String email, String password) {

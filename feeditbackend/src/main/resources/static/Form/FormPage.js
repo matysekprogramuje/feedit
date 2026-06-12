@@ -1,21 +1,32 @@
-let selectedCategory = -1;
-let selectedRating = 0;
-let consentGiven = false;
 
-function selectCategory(el) {
-    document.querySelectorAll(".category-option").forEach(opt => opt.classList.remove("selected"));
-    el.classList.add("selected");
-    const options = document.querySelectorAll(".category-option");
-    options.forEach((opt, index) => {
-        if (opt === el) selectedCategory = index;
-    });
+let selectedCategory = -1;
+let selectedRating   = 0;
+let consentGiven     = false;
+
+function renderCategories() {
+    const list = document.getElementById("category-list");
+    const cats = categoryTranslations[lang];
+    list.innerHTML = cats.map((name, i) => `
+        <div class="category-option" onclick="selectCategory(this)">
+            <div class="cat-icon"><i></i> ${name}</div><i></i>
+        </div>
+    `).join("");
+
+    if (selectedCategory >= 0) {
+        const opts = list.querySelectorAll(".category-option");
+        if (opts[selectedCategory]) opts[selectedCategory].classList.add("selected");
+    }
 }
 
-function setStars(count) {
-    selectedRating = count;
-    document.querySelectorAll(".star").forEach((star, i) => {
-        star.classList.toggle("active", i < count);
-    });
+function selectCategory(el) {
+    document.querySelectorAll(".category-option").forEach(o => o.classList.remove("selected"));
+    el.classList.add("selected");
+    selectedCategory = [...el.parentElement.children].indexOf(el);
+}
+
+function setStars(n) {
+    selectedRating = n;
+    document.querySelectorAll(".star").forEach((s, i) => s.classList.toggle("active", i < n));
 }
 
 function toggleConsent() {
@@ -24,68 +35,80 @@ function toggleConsent() {
 }
 
 function resetForm() {
-    document.getElementById("name").value = "";
+    document.getElementById("name").value    = "";
     document.getElementById("contact").value = "";
     document.getElementById("comment").value = "";
     selectedCategory = -1;
-    selectedRating = 0;
-    consentGiven = false;
+    selectedRating   = 0;
+    consentGiven     = false;
 
-    document.querySelectorAll(".category-option").forEach(opt => opt.classList.remove("selected"));
-    document.querySelectorAll(".star").forEach(star => star.classList.remove("active"));
+    document.querySelectorAll(".category-option").forEach(o => o.classList.remove("selected"));
+    document.querySelectorAll(".star").forEach(s => s.classList.remove("active"));
     document.getElementById("consent-check").classList.remove("checked");
-
     document.getElementById("success-card").style.display = "none";
-    document.querySelector(".form-body").style.display = "";
+    document.querySelector(".form-body").style.display    = "";
 }
 
 function submitFeedback() {
-    const nameVal = document.getElementById("name").value.trim();
+    const nameVal    = document.getElementById("name").value.trim();
     const contactVal = document.getElementById("contact").value.trim();
     const commentVal = document.getElementById("comment").value.trim();
 
     if (!nameVal || !contactVal || selectedCategory === -1 || selectedRating === 0) {
-        alert("Vyplňte prosím všechna povinná pole.");
+        alert(messages[lang].requiredFields);
         return;
     }
 
-    // Determine if contact is email or phone number
     const isEmail = contactVal.includes("@");
-    const email = isEmail ? contactVal : "";
-    const number = isEmail ? "" : contactVal;
-
-    const today = new Date();
-    const date = today.toISOString().split("T")[0]; // "YYYY-MM-DD"
-
     const feedback = {
-        name: nameVal,
-        email: email,
-        number: number,
-        comment: commentVal,
-        rating: selectedRating,
-        category: selectedCategory,
-        date: date,
+        name:         nameVal,
+        email:        isEmail ? contactVal : "",
+        number:       isEmail ? "" : contactVal,
+        comment:      commentVal,
+        rating:       selectedRating,
+        category:     selectedCategory,
+        date:         new Date().toISOString().split("T")[0],
         wantsContact: consentGiven,
-        resolved: false
+        resolved:     false
     };
 
-    fetch("http://localhost:8080/api/user/sendFeedback", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(feedback)
+    fetch("/api/user/sendFeedback", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify(feedback)
     })
-        .then(response => {
-            if (!response.ok) throw new Error("Chyba serveru: " + response.status);
-            return response.json();
-        })
+        .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
         .then(() => {
             document.querySelector(".form-body").style.display = "none";
             document.getElementById("success-card").style.display = "";
         })
-        .catch(err => {
-            console.error("Chyba při odesílání:", err);
-            alert("Nepodařilo se odeslat hodnocení. Zkuste to prosím znovu.");
-        });
+        .catch(() => alert(messages[lang].sendError));
 }
+
+function applyLanguage() {
+    const t = translations[lang];
+    setText("goToVod",            t.goToVod);
+    setText("formTitle",          t.formTitle);
+    setText("formSubtitle",       t.formSubtitle);
+    setText("lbl-fullName",       t.fullName     + " *");
+    setText("lbl-contactField",   t.contactField + " *");
+    setText("lbl-category",       t.category     + " *");
+    setText("lbl-rating",         t.rating       + " *");
+    setText("lbl-comments",       t.comments);
+    setText("lbl-consent",        t.consent);
+    setText("lbl-submit",         t.submit);
+    setText("lbl-thanks",         t.thanks);
+    setText("lbl-successMessage", t.successMessage);
+    setText("lbl-sendAnother",    t.sendAnother);
+    setText("lbl-copyright",      t.copyright);
+    setPlaceholder("name",        t.fullNamePlaceholder);
+    setPlaceholder("contact",     t.contactPlaceholder);
+    setPlaceholder("comment",     t.commentPlaceholder);
+
+    renderCategories();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    mountLangSwitcher();
+    applyLanguage();
+});

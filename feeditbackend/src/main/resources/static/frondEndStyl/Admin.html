@@ -3,316 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Feed-it | Customer Feedback Dashboard</title>
-
+    <title>Feed-it | Dashboard</title>
     <link rel="stylesheet" href="Admin.css">
-
-    <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-            rel="stylesheet">
-
-    <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <link rel="stylesheet" href="../lang/langSwitcher.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 </head>
 <body>
 
 <div class="app">
 
-    <!-- TOP BAR -->
-
     <header class="topbar">
-
         <div class="topbar-left">
-
-            <div class="brand-logo">
-                <i class="ti ti-message-dots"></i>
-            </div>
-
+            <div class="brand-logo"><i class="ti ti-message-dots"></i></div>
             <div>
                 <h1>Feed-it</h1>
-                <p>Customer Feedback Management</p>
+                <p id="cusFeedbackManage">Správa zpětných vazeb</p>
             </div>
-
         </div>
-
         <div class="topbar-right">
+            <!-- Vlaječky v topbaru -->
+            <div id="lang-switcher-mount"></div>
 
             <div class="admin-badge">
                 <i class="ti ti-building"></i>
                 Vodafone Czech Republic
             </div>
-
             <div class="user-chip">
-
-                <div class="user-avatar">
-                    AD
-                </div>
-
+                <div class="user-avatar" id="user-avatar">AD</div>
                 <div>
-                    <div class="user-name">
-                        Administrator
-                    </div>
-
-                    <small>
-                        Feed-it Admin
-                    </small>
+                    <div class="user-name" id="user-name">Administrator</div>
+                    <small>Feed-it Admin</small>
                 </div>
-
             </div>
-
         </div>
-
     </header>
 
-    <!-- PAGE HEADER -->
-
     <section class="page-header">
-
         <div>
-
-            <h2>Customer Feedback</h2>
-
-            <p>
-                Monitor customer satisfaction, identify critical issues
-                and improve service quality across all Vodafone channels.
-            </p>
-
+            <h2 id="customerFeedback">Zákaznická zpětná vazba</h2>
+            <p id="adminDescription">Sledujte spokojenost zákazníků, identifikujte kritické problémy a zlepšujte kvalitu služeb napříč všemi kanály Vodafonu.</p>
         </div>
-
         <div class="header-actions">
-
-            <button class="action-btn">
+            <button class="action-btn" onclick="exportCSV()">
                 <i class="ti ti-download"></i>
-                Export
+                <span id="lbl-export">Export</span>
             </button>
-
-            <button class="action-btn primary">
+            <button class="action-btn primary" onclick="loadFeedback()">
                 <i class="ti ti-refresh"></i>
-                Refresh
+                <span id="lbl-refresh">Obnovit</span>
             </button>
-
         </div>
-
     </section>
-
-    <!-- KPI CARDS -->
 
     <section class="stats-grid">
-
         <div class="stat-card">
-
-            <div class="stat-icon red">
-                <i class="ti ti-message"></i>
-            </div>
-
+            <div class="stat-icon red"><i class="ti ti-message"></i></div>
             <div class="stat-info">
-
-                <span class="stat-label">
-                    Total Feedback
-                </span>
-
-                <span class="stat-value" id="s-total">
-                    0
-                </span>
-
-                <span class="stat-trend">
-                    All submitted reviews
-                </span>
-
+                <span class="stat-label" id="totalFeedback">Celkem hodnocení</span>
+                <span class="stat-value" id="s-total">0</span>
+                <span class="stat-trend" id="submittedReviews">Všechna hodnocení</span>
             </div>
-
         </div>
-
         <div class="stat-card">
-
-            <div class="stat-icon gold">
-                <i class="ti ti-star"></i>
-            </div>
-
+            <div class="stat-icon gold"><i class="ti ti-star"></i></div>
             <div class="stat-info">
-
-                <span class="stat-label">
-                    Average Rating
-                </span>
-
-                <span class="stat-value" id="s-avg">
-                    0
-                </span>
-
-                <span class="stat-trend">
-                    Customer satisfaction
-                </span>
-
+                <span class="stat-label" id="averageRating">Průměrné hodnocení</span>
+                <span class="stat-value" id="s-avg">0</span>
+                <span class="stat-trend" id="customerSatisfaction">Spokojenost zákazníků</span>
             </div>
-
         </div>
-
         <div class="stat-card">
-
-            <div class="stat-icon orange">
-                <i class="ti ti-alert-triangle"></i>
-            </div>
-
+            <div class="stat-icon orange"><i class="ti ti-alert-triangle"></i></div>
             <div class="stat-info">
-
-                <span class="stat-label">
-                    Critical Reviews
-                </span>
-
-                <span class="stat-value" id="s-neg">
-                    0
-                </span>
-
-                <span class="stat-trend">
-                    Requires attention
-                </span>
-
+                <span class="stat-label" id="criticalReviews">Kritická hodnocení</span>
+                <span class="stat-value" id="s-neg">0</span>
+                <span class="stat-trend" id="requiresAttention">Vyžaduje pozornost</span>
             </div>
-
         </div>
-
         <div class="stat-card">
-
-            <div class="stat-icon blue">
-                <i class="ti ti-phone"></i>
-            </div>
-
+            <div class="stat-icon blue"><i class="ti ti-phone"></i></div>
             <div class="stat-info">
-
-                <span class="stat-label">
-                    Contact Requests
-                </span>
-
-                <span class="stat-value" id="s-contact">
-                    0
-                </span>
-
-                <span class="stat-trend">
-                    Awaiting response
-                </span>
-
+                <span class="stat-label" id="contactRequests">Požadavky na kontakt</span>
+                <span class="stat-value" id="s-contact">0</span>
+                <span class="stat-trend" id="awaitingResponse">Čeká na odpověď</span>
             </div>
-
         </div>
-
     </section>
-
-    <!-- SEARCH -->
 
     <section class="toolbar">
-
         <div class="search-box">
-
             <i class="ti ti-search"></i>
-
-            <input
-                    type="text"
-                    id="search-input"
-                    placeholder="Search customer feedback..."
-                    oninput="render()">
-
+            <input type="text" id="search-input" placeholder="Vyhledat zpětnou vazbu..." oninput="render()">
         </div>
-
     </section>
-
-    <!-- SORTING -->
 
     <section class="sort-row">
-
-        <button
-                class="sort-btn active"
-                id="btn-date"
-                onclick="setSort('date')">
-
-            <i class="ti ti-calendar"></i>
-            Latest
-
+        <button class="sort-btn active" id="btn-date" onclick="setSort('date')">
+            <i class="ti ti-calendar"></i> <span id="lbl-latest">Nejnovější</span>
         </button>
-
-        <button
-                class="sort-btn"
-                id="btn-stars-desc"
-                onclick="setSort('stars-desc')">
-
-            <i class="ti ti-star"></i>
-            Highest Rated
-
+        <button class="sort-btn" id="btn-stars-desc" onclick="setSort('stars-desc')">
+            <i class="ti ti-star"></i> <span id="lbl-highestRated">Nejlépe hodnocené</span>
         </button>
-
-        <button
-                class="sort-btn"
-                id="btn-stars-asc"
-                onclick="setSort('stars-asc')">
-
-            <i class="ti ti-star-half"></i>
-            Lowest Rated
-
+        <button class="sort-btn" id="btn-stars-asc" onclick="setSort('stars-asc')">
+            <i class="ti ti-star-half"></i> <span id="lbl-lowestRated">Nejhůře hodnocené</span>
         </button>
-
     </section>
 
-    <!-- CATEGORY FILTERS -->
-
-    <section
-            class="category-tabs"
-            id="cat-tabs">
-    </section>
-
-    <!-- SECTION HEADER -->
+    <section class="category-tabs" id="cat-tabs"></section>
 
     <div class="section-header">
-
         <div>
-
-            <h3>Customer Feedback</h3>
-
-            <p>
-                Review and manage customer submissions
-            </p>
-
+            <h3 id="lbl-feedbackTitle">Zákaznická zpětná vazba</h3>
+            <p id="feedbackReviewAndManage">Spravovat a odpovídat na zpětné vazby</p>
         </div>
-
-        <div
-                class="results-count"
-                id="results-info">
-
-            0 reviews
-
-        </div>
-
+        <div class="results-count" id="results-info">0 hodnocení</div>
     </div>
 
-    <!-- FEEDBACK CARDS -->
+    <section class="feedback-grid" id="cards"></section>
 
-    <section
-            class="feedback-grid"
-            id="cards">
-    </section>
-
-    <!-- EMPTY STATE -->
-
-    <div
-            class="empty-state"
-            id="empty-state"
-            style="display:none;">
-
+    <div class="empty-state" id="empty-state" style="display:none;">
         <i class="ti ti-search-off"></i>
-
-        <h3>
-            No feedback found
-        </h3>
-
-        <p>
-            Try changing your search or filter settings.
-        </p>
-
+        <h3 id="noFeedback">Žádná zpětná vazba nebyla nalezena</h3>
+        <p id="tryDifferentSearch">Zkuste změnit vyhledávání nebo filtr.</p>
     </div>
 
 </div>
 
+<script src="../lang/translations.js"></script>
+<script src="../lang/langSwitcher.js"></script>
 <script src="Admin.js"></script>
-
 </body>
 </html>

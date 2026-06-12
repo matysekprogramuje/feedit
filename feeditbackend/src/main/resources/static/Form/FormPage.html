@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="FrontendDesign.css">
-    <title>Formular</title>
+    <link rel="stylesheet" href="../lang/langSwitcher.css">
+    <title>FeedIt – Formulář</title>
 </head>
 <body>
 
@@ -12,62 +14,41 @@
     <div class="pre-header">
         <a href="https://www.vodafone.cz" target="_blank" class="vodafone-link">
             <img src="https://files.catbox.moe/y23a1r.png" alt="Home">
-            <span>Přejít na Vodafone</span>
+            <span id="goToVod">Přejít na Vodafone</span>
         </a>
+        <!-- Vlaječky v pre-headeru -->
+        <div id="lang-switcher-mount" class="lang-switcher-dark" style="margin-left:16px;"></div>
     </div>
+
     <div class="header">
-        <img src="https://files.catbox.moe/wmef1f.png" id="logo"  alt="FeedIt logo">
+        <img src="https://files.catbox.moe/wmef1f.png" id="logo" alt="FeedIt logo">
     </div>
 
     <div class="form">
         <div class="form-body">
             <div class="form-header">
-                <h2>Ohodnoťte vaši zkušenost</h2>
-                <p>Pomozte nám zlepšit naše služby. Zabere to méně než minutu.</p>
-                <p>Políčka označená <span class="required">*</span> jsou povinná.</p>
+                <h2 id="formTitle">Ohodnoťte vaši zkušenost</h2>
+                <p id="formSubtitle">Pomozte nám zlepšit naše služby. Zabere to méně než minutu.</p>
+                <p id="requiredFields">Políčka označená <span class="required">*</span> jsou povinná.</p>
             </div>
             <div class="form-row">
                 <div class="field">
-                    <label>Jméno a příjmení<span class="required">*</span></label>
+                    <label id="lbl-fullName">Jméno a příjmení<span class="required">*</span></label>
                     <input type="text" id="name" placeholder="Zadejte svoje jméno" />
                 </div>
-
                 <div class="field">
-                    <label>E-mail nebo telefon<span class="required">*</span></label>
-                    <input type="text" id="contact" placeholder="Zadejte svoje cislo nebo e-mail" />
+                    <label id="lbl-contactField">E-mail nebo telefon<span class="required">*</span></label>
+                    <input type="text" id="contact" placeholder="Zadejte svoje číslo nebo e-mail" />
                 </div>
             </div>
             <div class="field">
-                <label>Co hodnotíte?<span class="required">*</span></label>
-                <div class="category-list">
-                    <div class="category-option" onclick="selectCategory(this)">
-                        <div class="cat-icon"><i></i> Zákaznická podpora</div><i></i>
-                    </div>
-                    <div class="category-option" onclick="selectCategory(this)">
-                        <div class="cat-icon"><i></i> Mobilní služby</div><i></i>
-                    </div>
-                    <div class="category-option" onclick="selectCategory(this)">
-                        <div class="cat-icon"><i></i> Internetové připojení</div><i></i>
-                    </div>
-                    <div class="category-option" onclick="selectCategory(this)">
-                        <div class="cat-icon"><i></i> TV a zábava</div><i></i>
-                    </div>
-                    <div class="category-option" onclick="selectCategory(this)">
-                        <div class="cat-icon"><i></i> Prodejna Vodafone</div><i></i>
-                    </div>
-                    <div class="category-option" onclick="selectCategory(this)">
-                        <div class="cat-icon"><i></i> Fakturace a platby</div><i></i>
-                    </div>
-                    <div class="category-option" onclick="selectCategory(this)">
-                        <div class="cat-icon"><i></i> Aplikace Můj Vodafone</div><i></i>
-                    </div>
-                    <div class="category-option" onclick="selectCategory(this)">
-                        <div class="cat-icon"><i></i>Jiné</div><i></i>
-                    </div>
+                <label id="lbl-category">Co hodnotíte?<span class="required">*</span></label>
+                <div class="category-list" id="category-list">
+                    <!-- Generováno JS při překladu -->
                 </div>
             </div>
             <div class="field">
-                <label>Hodnocení<span class="required">*</span></label>
+                <label id="lbl-rating">Hodnocení<span class="required">*</span></label>
                 <div class="stars" id="stars">
                     <span class="star" onclick="setStars(1)">★</span>
                     <span class="star" onclick="setStars(2)">★</span>
@@ -76,26 +57,31 @@
                     <span class="star" onclick="setStars(5)">★</span>
                 </div>
             </div>
-            <div class="field"><label>Komentář</label><textarea id="comment" placeholder="Popište vaši zkušenost..."></textarea></div>
+            <div class="field">
+                <label id="lbl-comments">Komentář</label>
+                <textarea id="comment" placeholder="Popište vaši zkušenost..."></textarea>
+            </div>
             <div class="form-row-con" onclick="toggleConsent()">
                 <div class="consent-check" id="consent-check"><span class="checkmark"></span></div>
-                <div class="consent-text">Souhlasím s tím, aby mě Vodafone kontaktoval ohledně mé zpětné vazby.</div>
+                <div class="consent-text" id="lbl-consent">Souhlasím s tím, aby mě Vodafone kontaktoval ohledně mé zpětné vazby.</div>
             </div>
-            <button class="submit-button" onclick="submitFeedback()"><i></i> Odeslat hodnocení</button>
+            <button class="submit-button" id="lbl-submit" onclick="submitFeedback()">Odeslat hodnocení</button>
         </div>
         <div class="success-card" id="success-card">
             <div class="success-icon"><i></i></div>
-            <h3>Děkujeme!</h3>
-            <p>Vaše zpětná vazba byla odeslána. Váží si jí celý náš tým.</p>
-            <button class="back-button" onclick="resetForm()">Odeslat další hodnocení</button>
+            <h3 id="lbl-thanks">Děkujeme!</h3>
+            <p id="lbl-successMessage">Vaše zpětná vazba byla odeslána. Váží si jí celý náš tým.</p>
+            <button class="back-button" id="lbl-sendAnother" onclick="resetForm()">Odeslat další hodnocení</button>
         </div>
     </div>
 </div>
 
 <div class="footer">
-    <p>Copyright © 2026 Feed It technologie Vodafone</p>
+    <p id="lbl-copyright">Copyright © 2026 Feed It technologie Vodafone</p>
 </div>
 
+<script src="../lang/translations.js"></script>
+<script src="../lang/langSwitcher.js"></script>
 <script src="FormPage.js"></script>
 </body>
 </html>

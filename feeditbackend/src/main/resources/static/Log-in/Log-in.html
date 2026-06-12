@@ -4,12 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feed-it Portál</title>
-
     <link rel="stylesheet" href="Log-in.css">
-
-    <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <link rel="stylesheet" href="../lang/langSwitcher.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 </head>
 <body>
 
@@ -18,94 +15,71 @@
 <div class="container">
 
     <div class="hero">
-
         <div class="logo">
             <div class="logo-circle"></div>
-
             <div>
                 <h3>Vodafone</h3>
-                <p>Platforma Feed-it</p>
+                <p id="platform">Platforma Feed-it</p>
             </div>
         </div>
 
+        <!-- Vlaječky -->
+        <div id="lang-switcher-mount" class="lang-switcher-light"></div>
+
         <div class="hero-content">
-
-            <h1>Portál zákaznické zkušenosti</h1>
-
-            <p>
-                Spravujte zpětnou vazbu zákazníků,
-                sledujte spokojenost a zlepšujte kvalitu služeb.
-            </p>
-
+            <h1 id="portalTitle">Portál zákaznické zkušenosti</h1>
+            <p id="portalTitleDes">Spravujte zpětnou vazbu zákazníků, sledujte spokojenost a zlepšujte kvalitu služeb.</p>
         </div>
-
     </div>
 
     <div class="login-panel">
-
         <div class="login-card">
 
             <div class="icon">
                 <i class="ti ti-message-dots"></i>
             </div>
 
-            <h2>Přihlášení</h2>
+            <h2 id="login">Přihlášení</h2>
+            <p class="subtitle" id="loginSubtitle">Přihlaste se do systému správy zpětné vazby.</p>
 
-            <p class="subtitle">
-                Přihlaste se do systému správy zpětné vazby.
-            </p>
-
-            <div
-                    class="login-error"
-                    id="login-error">
-
+            <div class="login-error" id="loginError">
                 Nesprávné přihlašovací údaje
-
             </div>
 
             <div class="field">
-                <label>Uživatelské jméno</label>
-
-                <input
-                        type="text"
-                        id="l-user"
-                        placeholder="Zadejte uživatelské jméno">
+                <label id="lbl-username">Uživatelské jméno</label>
+                <input type="text" id="l-user" placeholder="Zadejte uživatelské jméno">
             </div>
 
             <div class="field">
-                <label>Heslo</label>
-
-                <input
-                        type="password"
-                        id="l-pass"
-                        placeholder="Zadejte heslo">
+                <label id="lbl-password">Heslo</label>
+                <input type="password" id="l-pass" placeholder="Zadejte heslo">
             </div>
 
-            <button
-                    class="login-btn"
-                    onclick="doLogin()">
-
+            <button class="login-btn" onclick="doLogin()" id="loginButton">
                 Přihlásit se
-
             </button>
 
+            <p style="margin-top:20px; text-align:center; font-size:13px; color:#888;">
+                <span id="noAccountText">Nemáte účet?</span>
+                <a href="../Regiter/registerHtml.html" style="color:#e60000; font-weight:600; text-decoration:none;" id="registerLink">
+                    Zaregistrujte se
+                </a>
+            </p>
+
             <div class="demo">
-
-                <strong>Testovací účty</strong>
-
-                <p>Zákazník: customer / user123</p>
-
-                <p>Administrátor: admin / admin123</p>
-
+                <strong id="testAcc">Testovací účty</strong>
+                <p id="customerAcc">Zákazník: customer / user123</p>
+                <p id="adminAcc">Administrátor: admin / admin123</p>
             </div>
 
         </div>
-
     </div>
 
 </div>
 
+<script src="../lang/translations.js"></script>
+<script src="../lang/langSwitcher.js"></script>
 <script src="Log-in.js"></script>
-
 </body>
 </html>

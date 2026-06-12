@@ -1,0 +1,73 @@
+/* ── LANGUAGE SWITCHER ── */
+.lang-switcher {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.lang-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 10px;
+    border: 1.5px solid transparent;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: inherit;
+    transition: background 0.15s, border-color 0.15s;
+    line-height: 1;
+}
+
+.lang-btn:hover {
+    background: rgba(255,255,255,0.22);
+}
+
+.lang-btn.active {
+    background: rgba(255,255,255,0.28);
+    border-color: rgba(255,255,255,0.6);
+}
+
+.flag-icon {
+    width: 20px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    border-radius: 2px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.flag-icon svg {
+    width: 100%;
+    height: 100%;
+}
+
+.lang-label {
+    letter-spacing: 0.05em;
+}
+
+/* Dark background variant (pre-header, topbar) */
+.lang-switcher-dark .lang-btn {
+    color: #ccc;
+    background: rgba(0,0,0,0.2);
+}
+.lang-switcher-dark .lang-btn.active {
+    color: #fff;
+    background: rgba(0,0,0,0.4);
+    border-color: rgba(255,255,255,0.3);
+}
+
+/* Light background variant (hero section) */
+.lang-switcher-light .lang-btn {
+    color: #333;
+    background: rgba(0,0,0,0.06);
+}
+.lang-switcher-light .lang-btn.active {
+    color: #e60000;
+    background: #fff;
+    border-color: #e60000;
+}

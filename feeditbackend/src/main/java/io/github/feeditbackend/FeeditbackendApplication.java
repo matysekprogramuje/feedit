@@ -10,6 +10,7 @@ public class FeeditbackendApplication {
 
 	public static void main(String[] args) {
 		Data.loadFeedback();
+
 		SpringApplication.run(FeeditbackendApplication.class, args);
 	}
 }

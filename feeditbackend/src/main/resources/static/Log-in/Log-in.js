@@ -17,36 +17,31 @@ async function doLogin() {
         });
 
         const result = await response.text();
-        console.log(result)
+        console.log(result);
 
-        if (result === "LOGIN OK") {
-            hideError();
-            window.location.href = "FeedbackForm.html";
-        } else {
-            showError();
+        if (result.trim() === "LOGIN OK ADMIN") {
+            sessionStorage.setItem("username", username);
+            window.location.href = "../frondEndStyl/Admin.html";
+        }
+
+        if (result.trim() === "LOGIN OK USER") {
+            sessionStorage.setItem("username", username);
+            window.location.href = "../Introduction/IntroductionPage.html";
+        }
+
+        else {
+            showLoginError();
         }
 
     } catch (e) {
         console.error(e);
-        showError();
+        showLoginError();
     }
-
 }
-
-function showError() {
+function showLoginError() {
     document.getElementById("login-error").style.display = "block";
 }
 
-function hideError() {
+function hideLoginError() {
     document.getElementById("login-error").style.display = "none";
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    hideError();
-    document.getElementById("l-user").addEventListener("keydown", handleEnter);
-    document.getElementById("l-pass").addEventListener("keydown", handleEnter);
-});
-
-function handleEnter(e) {
-    if (e.key === "Enter") doLogin();
 }

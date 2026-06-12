@@ -49,13 +49,16 @@ public class AuthService {
 
                 String storedUsername = user[0];
                 String storedPassword = user[3];
+                boolean admin = Boolean.parseBoolean(user[4]);
 
                 if (storedUsername.equalsIgnoreCase(username)) {
 
                     if (BCrypt.checkpw(password, storedPassword)) {
-                        return "LOGIN OK";
-                    } else {
-                        return "WRONG PASSWORD";
+                        if (admin) {
+                            return "LOGIN OK ADMIN";
+                        } else {
+                            return "LOGIN OK USER";
+                        }
                     }
                 }
             }

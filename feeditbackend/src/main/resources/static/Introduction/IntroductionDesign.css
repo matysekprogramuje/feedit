@@ -508,3 +508,60 @@ body {
 .btn--primary:hover {
     background: #c60000;
 }
+/* ─────────────────────────────
+   USER STATE HEADER (clean Vodafone style)
+───────────────────────────── */
+
+#user-box {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;
+    padding: 6px 10px;
+}
+
+/* username pill */
+#user-name {
+    color: rgba(255,255,255,0.95);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(6px);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* admin badge */
+#user-name::before {
+    content: "●";
+    font-size: 10px;
+    color: #fff;
+    opacity: 0.8;
+}
+
+/* logout button */
+#user-box button {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: #e60000;
+    background: #fff;
+    border: none;
+    padding: 7px 14px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+#user-box button:hover {
+    background: rgba(255,255,255,0.9);
+    transform: translateY(-1px);
+}
+
+#user-box button:active {
+    transform: translateY(0px);
+}

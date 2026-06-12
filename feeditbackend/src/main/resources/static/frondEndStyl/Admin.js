@@ -2,6 +2,15 @@
    CONFIG
 ================================== */
 
+
+document.addEventListener("DOMContentLoaded", () => {
+    const username = sessionStorage.getItem("username");
+
+    if (username) {
+        document.getElementById("user-name").textContent = username;
+    }
+});
+
 const API_BASE = "http://localhost:8080/api";
 
 const CATEGORY_NAMES = [

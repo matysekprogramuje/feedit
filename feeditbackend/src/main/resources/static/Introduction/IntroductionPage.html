@@ -2,71 +2,98 @@
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <title>Feed It - Úvodní stránka</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feed It – Úvodní stránka</title>
     <link rel="stylesheet" href="IntroductionDesign.css">
 </head>
-
 <body>
-<div class="page">
 
-    <div class="top-bar">
-        <a href="https://www.vodafone.cz" target="_blank" class="vodafone-link">
-            <img src="https://files.catbox.moe/y23a1r.png" alt="Home">
-            <span>Přejít na Vodafone</span>
+<div class="top-bar">
+    <a href="https://www.vodafone.cz" target="_blank" class="vodafone-link">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Přejít na Vodafone.cz
+    </a>
+</div>
+
+<header class="header">
+    <a href="#" class="header-logo">
+        <img src="https://files.catbox.moe/wmef1f.png" alt="FeedIt logo" class="logo-img">
+    </a>
+    <nav class="header-nav">
+        <a href="#" class="nav-link" onclick="window.location.href='../Regiter/register.html'">Registrace</a>
+        <a href="#" class="nav-link2 nav-link--primary" onclick="window.location.href='../Log-in/Log-in.html'">Přihlásit se</a>
+        <a href="#" class="nav-icon" aria-label="Profil">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
         </a>
-    </div>
+    </nav>
+</header>
 
-    <div class="header">
-        <img src="https://files.catbox.moe/wmef1f.png" id="logo" alt="FeedIt logo">
-        <div class="auth-links">
-            <a href="#">Registrace</a>
-            <a href="#">Přihlásit se</a>
+<main class="hero">
+    <div class="hero-bg-shape" aria-hidden="true"></div>
+
+    <div class="hero-inner">
+        <div class="hero-left" data-reveal>
+
+            <div class="accent-line"></div>
+
+            <h1 class="headline">
+                Váš hlas.<br>
+                <span class="headline-accent">Naše změna.</span>
+            </h1>
+
+            <p class="lead">
+                Jsme <strong>Feed It</strong> od Vodafonu – platforma, kde vaše zkušenosti
+                skutečně něco znamenají. Sdílejte recenze, hodnoťte naše služby
+                a pomáhejte nám zlepšovat se každý den.
+            </p>
+
+
+            <p class="lead lead--small">
+                Máte otázky? Kontaktujte
+                <a href="https://www.vodafone.cz/podpora/" target="_blank" class="text-link">zákaznickou podporu Vodafone</a>.
+            </p>
+
+            <div class="cta-group">
+                <button class="btn btn--primary" onclick="window.location.href='../Form/FormPage.html'">
+                    Napsat recenzi
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </button>
+                <button class="btn btn--ghost">Jak to funguje?</button>
+            </div>
         </div>
-        <img id="user-icon" src="https://assets.streamlinehq.com/image/private/w_300,h_300,ar_1/f_auto/v1/icons/ui/user-1-5ec13.png?_a=DATAiZAAZAA0" alt="Uživatelský profil">
-    </div>
 
-    <div class="content">
-        <div class="content-inner">
-
-            <div class="left-side">
-                <div class="accent-line"></div>
-
-                <h1>Váš hlas.<br><span>Naše změna.</span></h1>
-
-                <p class="lead">
-                    Jsme <b>Feed It</b> od Vodafonu - platforma, kde vaše zkušenosti
-                    skutečně něco znamenají. Sdílejte recenze, hodnoťte naše služby
-                    a pomáhejte nám zlepšovat se. Každou odpověď čteme a aktivně
-                    s ní pracujeme.
-                </p>
-
-                <p class="lead">
-                    Recenzi zanecháte bez registrace i s přihlášením. Pokud budete chtít,
-                    můžeme vás ohledně vaší recenze kontaktovat, ale pouze s vaším souhlasem.
-                </p>
-
-                <p class="lead">
-                    Máte otázky nebo potřebujete pomoc? Kontaktujte
-                    <a href="https://www.vodafone.cz/podpora/" target="_blank">zákaznickou podporu Vodafone</a>.
-                </p>
-
-                <div>
-                    <button class="review-button" onclick="window.location.href='../Form/FormPage.html'">Napsat recenzi</button>
-                </div>
-            </div>
-
-            <div class="right-side">
-                <img src="https://file.garden/agGlWxEnpRn5fc3C/feedit-typek.png" alt="">
-            </div>
-
+        <div class="hero-right" data-reveal data-reveal-delay="150">
+            <img
+                    src="https://file.garden/agGlWxEnpRn5fc3C/feedit-typek.png"
+                    alt="Feed It ilustrace postavy"
+                    class="hero-img"
+            >
         </div>
     </div>
 
-</div>
+    <div class="trust-bar" data-reveal data-reveal-delay="300">
+        <div class="trust-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Tisíce zákazníků
+        </div>
+        <div class="trust-sep" aria-hidden="true"></div>
+        <div class="trust-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Aktivně zpracováváme
+        </div>
+        <div class="trust-sep" aria-hidden="true"></div>
+        <div class="trust-item">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+            Bez skrytých podmínek
+        </div>
+    </div>
+</main>
 
-<div class="footer">
-    <p>Copyright © 2026 Feed It technologie Vodafone</p>
-</div>
+<footer class="footer">
+    <p class="footer-copy">© 2026 Feed It – technologie Vodafone</p>
+    </nav>
+</footer>
 
+<script src="design.js"></script>
 </body>
 </html>

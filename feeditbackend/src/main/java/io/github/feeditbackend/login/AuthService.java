@@ -44,8 +44,6 @@ public class AuthService {
 
         try {
             List<String[]> users = readCSV();
-            System.out.println(users.size());
-
 
             for (String[] user : users) {
 
@@ -96,7 +94,6 @@ public class AuthService {
             while (sc.hasNextLine()) {
                 line = sc.nextLine();
                 data.add(line.split(","));
-                System.out.println(line);
             }
         }
         return data;

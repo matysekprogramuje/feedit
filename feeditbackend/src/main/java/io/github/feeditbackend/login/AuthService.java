@@ -48,7 +48,7 @@ public class AuthService {
             for (String[] user : users) {
 
                 String storedUsername = user[0];
-                String storedPassword = user[2];
+                String storedPassword = user[3];
 
                 if (storedUsername.equalsIgnoreCase(username)) {
 

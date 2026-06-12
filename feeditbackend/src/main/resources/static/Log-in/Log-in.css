@@ -40,7 +40,7 @@ body{
 
 /* ── RED HEADER ── */
 .site-header{
-    position:relative;
+
     z-index:2;
     background:var(--red);
     width:100%;
@@ -50,6 +50,8 @@ body{
     padding:0 32px;
     box-shadow:0 2px 12px rgba(230,0,0,.35);
     flex-shrink:0;
+    position: sticky;
+
 }
 
 .site-header img{
@@ -366,6 +368,7 @@ body{
     align-items: center;
     flex-shrink: 0;
     width: 100%;
+    
 }
 
 .header img {

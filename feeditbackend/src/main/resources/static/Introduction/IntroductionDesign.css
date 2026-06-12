@@ -71,9 +71,6 @@ body {
     align-items: center;
     justify-content: space-between;
     flex-shrink: 0;
-    position: sticky;
-    top: 0;
-    z-index: 100;
 }
 
 .header-logo { display: flex; align-items: center; text-decoration: none; }
@@ -293,40 +290,11 @@ body {
     border: 1.5px solid transparent;
     cursor: pointer;
     text-decoration: none;
-    transition:
-            background var(--transition),
-            border-color var(--transition),
-            color var(--transition),
-            box-shadow var(--transition),
-            transform var(--transition);
+
     -webkit-user-select: none;
     user-select: none;
 }
-.btn:active { transform: scale(0.975); }
 
-.btn--primary {
-    background: var(--red);
-    color: #fff;
-    border-color: var(--red);
-}
-.btn--primary:hover {
-    background: var(--red-dark);
-    border-color: var(--red-dark);
-    box-shadow: var(--shadow-btn);
-    transform: translateY(-1px);
-}
-.btn--primary:active { transform: scale(0.975); box-shadow: none; }
-
-.btn--ghost {
-    background: transparent;
-    color: var(--ink-mid);
-    border-color: var(--border);
-}
-.btn--ghost:hover {
-    border-color: #c0c0c0;
-    color: var(--ink);
-    background: rgba(0,0,0,0.03);
-}
 
 /* ── Right Column ─────────────────────────────────── */
 .hero-right {
@@ -443,4 +411,100 @@ body {
     [data-reveal] { opacity: 1; transform: none; transition: none; }
     .eyebrow-dot { animation: none; }
     .btn { transition: none; }
+}
+
+.pre-header {
+    background: #25282b;
+    height: 30px;
+    padding: 6px 15px 7px 5px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 80%);
+    flex-shrink: 0;
+    width: 100%;
+}
+
+.header {
+    background: #e60000;
+    height: 74px;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.header img {
+    height: 47px;
+    width: auto;
+}
+
+.footer {
+    text-align: center;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    font-size: 13px;
+    color: #f2f2f2;
+    background: #25282b;
+}
+
+.auth-links a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-size: 20px;
+    padding: 6px 16px;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.3);
+    box-shadow: none;
+    transition: background 0.18s, color 0.18s, border-color 0.18s;
+    padding-bottom: 6px;
+}
+
+.auth-links a:hover {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    border-color: rgba(255,255,255,0.5);
+    box-shadow: none;
+}
+
+.auth-links a:last-child {
+    background: #fff;
+    color: #e60000;
+    border-color: #fff;
+    font-weight: 600;
+}
+
+.auth-links a:last-child:hover {
+    background: rgba(255,255,255,0.9);
+    border-color: rgba(255,255,255,0.9);
+}
+
+#user-icon {
+    filter: invert(1);
+    margin-left: 16px;
+}
+
+.auth-links {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;
+}
+
+.btn--primary {
+    background: linear-gradient(to right, #c60000 0%, #ff0000 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 15px 26px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.btn--primary:hover {
+    background: #c60000;
 }

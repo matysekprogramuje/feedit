@@ -17,11 +17,16 @@
 
 <div class="header">
     <img src="https://files.catbox.moe/wmef1f.png" id="logo" alt="FeedIt logo">
-    <div class="auth-links">
+
+    <div class="auth-links" id="auth-links">
         <a href="../Regiter/register.html">Registrace</a>
         <a href="../Log-in/Log-in.html">Přihlásit se</a>
     </div>
-    <img id="user-icon" src="https://assets.streamlinehq.com/image/private/w_300,h_300,ar_1/f_auto/v1/icons/ui/user-1-5ec13.png?_a=DATAiZAAZAA0" alt="Uživatelský profil">
+
+    <div id="user-box">
+        <span id="user-name"></span>
+        <button onclick="logout()">Odhlásit</button>
+    </div>
 </div>
 
 <main class="hero">

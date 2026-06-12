@@ -14,13 +14,18 @@
 <body>
 
 
-
 <!-- ── RED HEADER ── -->
+
 <div class="pre-header">
     <a href="https://www.vodafone.cz" target="_blank" class="vodafone-link">
         <img src="https://files.catbox.moe/y23a1r.png" alt="Home">
-        <span>Přejít na Vodafone</span>
+        <span data-i18n="go_vodafone">Přejít na Vodafone</span>
     </a>
+    <div class="lang-switch">
+        <button onclick="setLang('cs')">🇨🇿</button>
+        <button onclick="setLang('en')">🇺🇸</button>
+    </div>
+
 </div>
 
 <div class="header">
@@ -37,9 +42,9 @@
 
             <div class="hero-content">
 
-                <h1>Portál zákaznické zkušenosti</h1>
+                <h1 data-i18n="main_title">Portál zákaznické zkušenosti</h1>
 
-                <p>
+                <p data-i18n="main_desc">
                     Spravujte zpětnou vazbu zákazníků,
                     sledujte spokojenost a zlepšujte kvalitu služeb.
                 </p>
@@ -56,33 +61,33 @@
                     <i class="ti ti-message-dots"></i>
                 </div>
 
-                <h2>Přihlášení</h2>
+                <h2 data-i18n="login_title">Přihlášení</h2>
 
-                <p class="subtitle">
+                <p class="subtitle" data-i18n="login_subtitle">
                     Přihlaste se do systému správy zpětné vazby.
                 </p>
 
-                <div class="login-error" id="login-error">
+                <div class="login-error" id="login-error" data-i18n="login_error">
                     Nesprávné přihlašovací údaje
                 </div>
 
                 <div class="field">
-                    <label>Uživatelské jméno</label>
+                    <label data-i18n="username_label"></label>
                     <input
                             type="text"
                             id="l-user"
-                            placeholder="Zadejte uživatelské jméno">
+                            data-i18n-placeholder="username_placeholder">
                 </div>
 
                 <div class="field">
-                    <label>Heslo</label>
+                    <label data-i18n="password_label"></label>
                     <input
                             type="password"
                             id="l-pass"
-                            placeholder="Zadejte heslo">
+                            data-i18n-placeholder="password_placeholder">
                 </div>
 
-                <button class="submit-button" onclick="doLogin()"><i></i> Přihlásit se</button>
+                <button class="submit-button" onclick="doLogin()" data-i18n="login_button"><i></i> Přihlásit se</button>
 
                 <div class="demo">
                     <strong>Testovací účty</strong>

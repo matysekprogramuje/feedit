@@ -1,3 +1,117 @@
+const translations = {
+    cs: {
+        go_vodafone: "Přejít na Vodafone",
+
+        register_title: "Vytvořte si účet",
+        register_subtitle: "Registrace trvá méně než minutu.",
+        required_fields_text: "Políčka označená * jsou povinná.",
+
+        full_name_label: "Jméno a příjmení *",
+        full_name_placeholder: "Jan Novák",
+
+        phone_label: "Telefon",
+        phone_placeholder: "+420 123 456 789",
+
+        email_label: "E-mail *",
+        email_placeholder: "jan@email.cz",
+
+        password_label: "Heslo *",
+        password_placeholder: "••••••••",
+
+        confirm_password_label: "Potvrzení hesla *",
+        confirm_password_placeholder: "••••••••",
+
+        show_password: "Zobrazit heslo",
+
+        consent_text: "Souhlasím se zpracováním osobních údajů a obchodními podmínkami Vodafone.",
+
+        register_button: "Registrovat se",
+
+        already_have_account: "Máte již účet?",
+        login_link: "Přihlásit se",
+
+        success_title: "Vítejte!",
+        success_message: "Váš účet byl úspěšně vytvořen. Můžete se nyní přihlásit.",
+        back_to_registration: "Zpět na registraci",
+
+        footer_copyright: "Copyright © 2026 Feed It technologie Vodafone"
+    },
+
+    en: {
+        go_vodafone: "Go to Vodafone",
+
+        register_title: "Create an Account",
+        register_subtitle: "Registration takes less than a minute.",
+        required_fields_text: "Fields marked with * are required.",
+
+        full_name_label: "Full Name *",
+        full_name_placeholder: "John Smith",
+
+        phone_label: "Phone",
+        phone_placeholder: "+420 123 456 789",
+
+        email_label: "Email *",
+        email_placeholder: "john@email.com",
+
+        password_label: "Password *",
+        password_placeholder: "••••••••",
+
+        confirm_password_label: "Confirm Password *",
+        confirm_password_placeholder: "••••••••",
+
+        show_password: "Show password",
+
+        consent_text: "I agree to the processing of personal data and Vodafone terms and conditions.",
+
+        register_button: "Register",
+
+        already_have_account: "Already have an account?",
+        login_link: "Sign in",
+
+        success_title: "Welcome!",
+        success_message: "Your account has been successfully created. You can now sign in.",
+        back_to_registration: "Back to registration",
+
+        footer_copyright: "Copyright © 2026 Feed It Vodafone Technology"
+    }
+};
+
+let currentLang = "cs";
+
+function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem("lang", lang);
+    translatePage();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    currentLang = localStorage.getItem("lang") || "cs";
+    translatePage();
+});
+
+
+function translatePage() {
+    const dict = translations[currentLang];
+
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        el.innerText = dict[key] || "";
+    });
+
+    document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+        const key = el.getAttribute("data-i18n-placeholder");
+        el.placeholder = dict[key] || "";
+    });
+
+    document.querySelectorAll("[data-i18n-aria-label]").forEach(el => {
+        const key = el.getAttribute("data-i18n-aria-label");
+        el.setAttribute("aria-label", dict[key] || "");
+    });
+}
+
+
+
+
 var consentOn = false;
 
 function toggleConsent() {

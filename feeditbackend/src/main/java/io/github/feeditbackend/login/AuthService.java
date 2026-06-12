@@ -76,14 +76,18 @@ public class AuthService {
         if(!file.exists()) {
             try {
                 file.createNewFile();
-                try (FileWriter fw = new FileWriter(FILE, true)) {
-                    if(file.length() == 0) {
-                        fw.write("username,email,password,isAdmin\n");
-                    }
-                }
             } 
             catch (IOException e) {}
         }
+
+        try(FileWriter fw = new FileWriter(FILE, true)) {
+            if(file.length() == 0) {
+                fw.write("username,email,password,isAdmin\n");
+                fw.write("admin,admin@email.com,$2a$10$NSwPCXsL8iNYpFd.8Ju.h.RPnRC.MEVddVdAdIklcWTNXFWk2Ho6G,false\n");
+                fw.write("customer,customer@email.com,$2a$10$AZt.FJVhfgSRzrikU7GxSOpPQst6s/DH7WF63i1F73afSR1YzwlfO,false\n");
+            }
+        } 
+        catch (IOException e) {}
 
         List<String[]> data;
         try (Scanner sc = new Scanner(file)) {

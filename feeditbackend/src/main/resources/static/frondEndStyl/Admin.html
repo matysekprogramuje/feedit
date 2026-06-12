@@ -15,6 +15,23 @@
     <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js"></script>
+
+    <style>
+        .charts-section { margin: 8px 0 28px; }
+        .charts-title { font-size: 18px; font-weight: 700; margin: 0 0 14px; }
+        .charts-grid {
+            display: grid; gap: 18px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        }
+        .chart-card {
+            background: #fff; border-radius: 14px; padding: 18px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .08);
+        }
+        .chart-card h4 { margin: 0 0 12px; font-size: 14px; font-weight: 600; }
+        .chart-box { position: relative; height: 240px; }
+    </style>
 </head>
 <body>
 
@@ -199,6 +216,48 @@
 
     </section>
 
+    <!-- CHARTS / GRAFY -->
+
+    <section class="charts-section">
+
+        <h3 class="charts-title">Přehledové grafy</h3>
+
+        <div class="charts-grid">
+
+            <div class="chart-card">
+                <h4>Feedback v čase (po dnech)</h4>
+                <div class="chart-box"><canvas id="ch-po-dnech"></canvas></div>
+            </div>
+
+            <div class="chart-card">
+                <h4>Rozložení hodnocení</h4>
+                <div class="chart-box"><canvas id="ch-hodnoceni"></canvas></div>
+            </div>
+
+            <div class="chart-card">
+                <h4>Počet podle kategorie</h4>
+                <div class="chart-box"><canvas id="ch-kategorie"></canvas></div>
+            </div>
+
+            <div class="chart-card">
+                <h4>Průměrné hodnocení podle kategorie</h4>
+                <div class="chart-box"><canvas id="ch-prumer-kat"></canvas></div>
+            </div>
+
+            <div class="chart-card">
+                <h4>Stav řešení</h4>
+                <div class="chart-box"><canvas id="ch-stav"></canvas></div>
+            </div>
+
+            <div class="chart-card">
+                <h4>Aktivita podle dne v týdnu</h4>
+                <div class="chart-box"><canvas id="ch-dny"></canvas></div>
+            </div>
+
+        </div>
+
+    </section>
+
     <!-- SEARCH -->
 
     <section class="toolbar">
@@ -313,6 +372,7 @@
 </div>
 
 <script src="Admin.js"></script>
+<script src="Charts.js"></script>
 
 </body>
 </html>

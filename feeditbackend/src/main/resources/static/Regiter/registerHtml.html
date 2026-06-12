@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrace – FeedIt</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+<body>
+
+<div class="vf-wrap">
+
+    <div class="vf-pre">
+        <a href="https://www.vodafone.cz" target="_blank">
+            <i class="ti ti-home"></i>
+            Přejít na Vodafone
+        </a>
+    </div>
+
+    <div class="vf-header">
+        <span class="vf-header-title">FeedIt</span>
+    </div>
+
+    <div class="vf-body">
+        <div class="vf-card">
+
+            <!-- Formulář -->
+            <div id="form-section">
+                <div class="vf-card-head">
+                    <h2>Vytvořte si účet</h2>
+                    <p>Registrace trvá méně než minutu. Pole označená <span class="req">*</span> jsou povinná.</p>
+                </div>
+
+                <div class="vf-row">
+                    <div class="vf-field">
+                        <label>Jméno a příjmení <span class="req">*</span></label>
+                        <input type="text" id="f-name" placeholder="Jan Novák" />
+                    </div>
+                    <div class="vf-field">
+                        <label>Telefon</label>
+                        <input type="tel" id="f-phone" placeholder="+420 123 456 789" />
+                    </div>
+                </div>
+
+                <div class="vf-field">
+                    <label>E-mail <span class="req">*</span></label>
+                    <input type="email" id="f-email" placeholder="jan@email.cz" />
+                </div>
+
+                <div class="vf-field">
+                    <label>Heslo <span class="req">*</span></label>
+                    <div class="pw-wrap">
+                        <input type="password" id="f-pw" placeholder="••••••••" oninput="updateStrength(this.value)" />
+                        <button class="pw-toggle" onclick="togglePw('f-pw', this)" type="button" aria-label="Zobrazit heslo">
+                            <i class="ti ti-eye"></i>
+                        </button>
+                    </div>
+                    <div class="pw-strength" id="pw-strength">
+                        <div class="pw-bar" id="b1"></div>
+                        <div class="pw-bar" id="b2"></div>
+                        <div class="pw-bar" id="b3"></div>
+                        <div class="pw-bar" id="b4"></div>
+                    </div>
+                </div>
+
+                <div class="vf-field">
+                    <label>Potvrzení hesla <span class="req">*</span></label>
+                    <div class="pw-wrap">
+                        <input type="password" id="f-pw2" placeholder="••••••••" />
+                        <button class="pw-toggle" onclick="togglePw('f-pw2', this)" type="button" aria-label="Zobrazit heslo">
+                            <i class="ti ti-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="vf-consent" onclick="toggleConsent()">
+                    <div class="consent-check" id="chk">
+                        <span class="tick"><i class="ti ti-check"></i></span>
+                    </div>
+                    <div class="consent-text">
+                        Souhlasím se <a href="#">zpracováním osobních údajů</a> a <a href="#">obchodními podmínkami</a> Vodafone.
+                    </div>
+                </div>
+
+                <button class="vf-btn" onclick="submitForm()">
+                    <i class="ti ti-user-plus"></i> Registrovat se
+                </button>
+
+                <div class="login-link">
+                    Máte již účet? <a href="#">Přihlásit se</a>
+                </div>
+            </div>
+
+            <!-- Success screen -->
+            <div class="vf-success" id="success-section">
+                <div class="success-icon"><i class="ti ti-check"></i></div>
+                <h3>Vítejte!</h3>
+                <p>Váš účet byl úspěšně vytvořen. Můžete se nyní přihlásit.</p>
+                <button class="vf-btn back-btn" onclick="resetForm()">
+                    <i class="ti ti-arrow-left"></i> Zpět na registraci
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="vf-footer">
+        Copyright © 2026 Feed It technologie Vodafone
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -31,10 +31,18 @@ public class Data {
             }
         }
 
-        // Fallback — vedle JAR souboru
-        System.out.println("[Data] Soubor nenalezen, používám fallback: feedback.csv");
-        System.out.println("[Data] Working directory: " + new File(".").getAbsolutePath());
-        return "feedback.csv";
+        File newDB = new File("feeditbackend/src/main/java/io/github/feeditbackend/data/feedback.csv");
+        try {
+            newDB.createNewFile();
+
+            try (FileWriter fw = new FileWriter(new File(newDB.getAbsolutePath()), true)) {
+                fw.write("name|email|number|comment|rating|category|date|wantsContact|resolved");
+            }
+        } 
+        catch (IOException e) {
+            System.out.println("ERROR: Writing to the new feedback databse failed");
+        }
+        return "feeditbackend/src/main/java/io/github/feeditbackend/data/feedback.csv";
     }
 
     public static void loadFeedback() {
@@ -69,7 +77,6 @@ public class Data {
 
         } catch (Exception e) {
             System.out.println("[Data] CHYBA: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 

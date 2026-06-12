@@ -5,28 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feed It – Úvodní stránka</title>
     <link rel="stylesheet" href="IntroductionDesign.css">
+    <link rel="stylesheet" href="../Form/FrontendDesign.css">
 </head>
 <body>
-
-<div class="top-bar">
+<div class="pre-header">
     <a href="https://www.vodafone.cz" target="_blank" class="vodafone-link">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        Přejít na Vodafone.cz
+        <img src="https://files.catbox.moe/y23a1r.png" alt="Home">
+        <span>Přejít na Vodafone</span>
     </a>
 </div>
 
-<header class="header">
-    <a href="#" class="header-logo">
-        <img src="https://files.catbox.moe/wmef1f.png" alt="FeedIt logo" class="logo-img">
-    </a>
-    <nav class="header-nav">
-        <a href="#" class="nav-link" onclick="window.location.href='../Regiter/register.html'">Registrace</a>
-        <a href="#" class="nav-link2 nav-link--primary" onclick="window.location.href='../Log-in/Log-in.html'">Přihlásit se</a>
-        <a href="#" class="nav-icon" aria-label="Profil">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-        </a>
-    </nav>
-</header>
+<div class="header">
+    <img src="https://files.catbox.moe/wmef1f.png" id="logo" alt="FeedIt logo">
+    <div class="auth-links">
+        <a href="../Regiter/register.html">Registrace</a>
+        <a href="../Log-in/Log-in.html">Přihlásit se</a>
+    </div>
+    <img id="user-icon" src="https://assets.streamlinehq.com/image/private/w_300,h_300,ar_1/f_auto/v1/icons/ui/user-1-5ec13.png?_a=DATAiZAAZAA0" alt="Uživatelský profil">
+</div>
 
 <main class="hero">
     <div class="hero-bg-shape" aria-hidden="true"></div>
@@ -89,11 +85,10 @@
     </div>
 </main>
 
-<footer class="footer">
-    <p class="footer-copy">© 2026 Feed It – technologie Vodafone</p>
-    </nav>
-</footer>
+<div class="footer">
+    <p>Copyright © 2026 Feed It technologie Vodafone</p>
+</div>
 
-<script src="design.js"></script>
+<script src="Design.js"></script>
 </body>
 </html>

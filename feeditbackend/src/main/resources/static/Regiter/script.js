@@ -29,29 +29,111 @@ function updateStrength(val) {
     }
 }
 
-async function submitForm() {
-    var name  = document.getElementById('f-name').value.trim();
-    var email = document.getElementById('f-email').value.trim();
-    var number = document.getElementById('f-phone').value.trim();
-    var pw    = document.getElementById('f-pw').value;
-    var pw2   = document.getElementById('f-pw2').value;
+function showError(fieldId, message) {
+    const input = document.getElementById(fieldId);
+    const field = input.closest(".field") || input.parentElement;
+    clearError(fieldId);
+    const err = document.createElement("span");
+    err.className = "field-error";
+    err.textContent = message;
+    field.appendChild(err);
+    input.classList.add("input-error");
+}
 
-    if (!name || !email || !pw) {
-        alert('Vyplňte prosím všechna povinná pole.');
-        return;
-    }
-    if (pw !== pw2) {
-        alert('Hesla se neshodují.');
-        return;
-    }
+function clearError(fieldId) {
+    const input = document.getElementById(fieldId);
+    input.classList.remove("input-error");
+    const field = input.closest(".field") || input.parentElement;
+    const existing = field.querySelector(".field-error");
+    if (existing) existing.remove();
+}
+
+function validateRegName(value) {
+    if (!value) return "Vyplňte prosím jméno.";
+    if (value.length < 2) return "Jméno musí mít alespoň 2 znaky.";
+    if (/[^\p{L}\s'\-]/u.test(value)) return "Jméno smí obsahovat pouze písmena.";
+    return null;
+}
+
+function validateEmail(value) {
+    if (!value) return "Vyplňte prosím e-mail.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)) return "Zadejte platnou e-mailovou adresu.";
+    return null;
+}
+
+function validatePhone(value) {
+    if (!value) return null;
+    const digits = value.replace(/[\s\-().+]/g, "");
+    if (!/^\d{7,15}$/.test(digits)) return "Zadejte platné telefonní číslo (7–15 číslic).";
+    return null;
+}
+
+function validatePassword(value) {
+    if (!value) return "Vyplňte prosím heslo.";
+    if (value.length < 8) return "Heslo musí mít alespoň 8 znaků.";
+    return null;
+}
+
+function validateConfirm(value) {
+    const pw = document.getElementById("f-pw").value;
+    if (!value) return "Potvrďte prosím heslo.";
+    if (value !== pw) return "Hesla se neshodují.";
+    return null;
+}
+
+function attachFieldValidation(fieldId, validateFn) {
+    const input = document.getElementById(fieldId);
+    if (!input) return;
+
+    input.addEventListener("blur", function () {
+        const err = validateFn(this.value.trim());
+        if (err) showError(fieldId, err);
+        else clearError(fieldId);
+    });
+
+    input.addEventListener("input", function () {
+        if (this.classList.contains("input-error")) {
+            const err = validateFn(this.value.trim());
+            if (!err) clearError(fieldId);
+        }
+    });
+}
+
+attachFieldValidation("f-name", validateRegName);
+attachFieldValidation("f-email", validateEmail);
+attachFieldValidation("f-phone", validatePhone);
+attachFieldValidation("f-pw", validatePassword);
+attachFieldValidation("f-pw2", validateConfirm);
+
+async function submitForm() {
+    var name   = document.getElementById('f-name').value.trim();
+    var email  = document.getElementById('f-email').value.trim();
+    var number = document.getElementById('f-phone').value.trim();
+    var pw     = document.getElementById('f-pw').value;
+    var pw2    = document.getElementById('f-pw2').value;
+
+    const nameErr    = validateRegName(name);
+    const emailErr   = validateEmail(email);
+    const phoneErr   = validatePhone(number);
+    const pwErr      = validatePassword(pw);
+    const confirmErr = validateConfirm(pw2);
+
+    if (nameErr)    showError('f-name', nameErr);
+    if (emailErr)   showError('f-email', emailErr);
+    if (phoneErr)   showError('f-phone', phoneErr);
+    if (pwErr)      showError('f-pw', pwErr);
+    if (confirmErr) showError('f-pw2', confirmErr);
+
+    if (nameErr || emailErr || phoneErr || pwErr || confirmErr) return;
+
     if (!consentOn) {
         alert('Pro registraci je nutný souhlas s podmínkami.');
         return;
     }
 
-    var btn = document.querySelector('.vf-btn');
+    var btn = document.querySelector('.submit-button');
     btn.disabled = true;
-    btn.textContent = 'Registruji...';
+    btn.innerHTML = '<i class="ti ti-loader"></i> Registruji...';
 
     try {
         var response = await fetch('http://localhost:8080/auth/register', {
@@ -66,7 +148,7 @@ async function submitForm() {
             document.getElementById('form-section').style.display = 'none';
             document.getElementById('success-section').style.display = 'flex';
         } else if (result === 'USER EXISTS') {
-            alert('Uživatel s tímto jménem již existuje.');
+            showError('f-name', 'Uživatel s tímto jménem již existuje.');
         } else {
             alert('Chyba při registraci: ' + result);
         }
@@ -88,6 +170,11 @@ function resetForm() {
     consentOn = false;
     document.getElementById('chk').classList.remove('on');
     updateStrength('');
+    clearError('f-name');
+    clearError('f-email');
+    clearError('f-phone');
+    clearError('f-pw');
+    clearError('f-pw2');
     document.getElementById('success-section').style.display = 'none';
     document.getElementById('form-section').style.display    = 'block';
 }

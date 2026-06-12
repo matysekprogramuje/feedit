@@ -16,7 +16,7 @@ public class AuthService {
     private final String FILE = "feeditbackend/src/main/java/io/github/feeditbackend/login/loginData.csv";
 
     // REGISTER
-    public String register(String username, String email, String password) {
+    public String register(String username, String email, String number, String password) {
 
         try {
             List<String[]> users = readCSV();
@@ -29,7 +29,7 @@ public class AuthService {
     
             try (FileWriter fw = new FileWriter(FILE, true)) {
                 String hash = BCrypt.hashpw(password, BCrypt.gensalt());
-                fw.write(username + "," + email + "," + hash + "," +  "false" + "\n");
+                fw.write(username + "," + email + "," + number + "," + hash + "," +  "false" + "\n");
             }
 
             return "REGISTER OK";
@@ -82,9 +82,9 @@ public class AuthService {
 
         try(FileWriter fw = new FileWriter(FILE, true)) {
             if(file.length() == 0) {
-                fw.write("username,email,password,isAdmin\n");
-                fw.write("admin,admin@email.com,$2a$10$NSwPCXsL8iNYpFd.8Ju.h.RPnRC.MEVddVdAdIklcWTNXFWk2Ho6G,false\n");
-                fw.write("customer,customer@email.com,$2a$10$AZt.FJVhfgSRzrikU7GxSOpPQst6s/DH7WF63i1F73afSR1YzwlfO,false\n");
+                fw.write("username,email,number,password,isAdmin\n");
+                fw.write("admin,admin@email.com,N/A,$2a$10$NSwPCXsL8iNYpFd.8Ju.h.RPnRC.MEVddVdAdIklcWTNXFWk2Ho6G,false\n");
+                fw.write("customer,customer@email.com,N/A,$2a$10$AZt.FJVhfgSRzrikU7GxSOpPQst6s/DH7WF63i1F73afSR1YzwlfO,false\n");
             }
         } 
         catch (IOException e) {}

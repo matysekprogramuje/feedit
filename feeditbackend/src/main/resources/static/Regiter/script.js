@@ -32,6 +32,7 @@ function updateStrength(val) {
 async function submitForm() {
     var name  = document.getElementById('f-name').value.trim();
     var email = document.getElementById('f-email').value.trim();
+    var number = document.getElementById('f-phone').value.trim();
     var pw    = document.getElementById('f-pw').value;
     var pw2   = document.getElementById('f-pw2').value;
 
@@ -56,7 +57,7 @@ async function submitForm() {
         var response = await fetch('http://localhost:8080/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: name, email: email, password: pw })
+            body: JSON.stringify({ username: name, email: email, number: number, password: pw })
         });
 
         var result = await response.text();

@@ -1,17 +1,22 @@
 package io.github.feeditbackend.login;
 
 
-import org.mindrot.jbcrypt.BCrypt;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
-import java.io.*;
-import java.util.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class AuthService {
 
     private final String FILE = "feeditbackend/src/main/java/io/github/feeditbackend/login/loginData.csv";
 
     // REGISTER
-    public String register(String username, String email, String password) {
+    public String register(String username, String email, String number, String password) {
 
         try {
             List<String[]> users = readCSV();
@@ -21,19 +26,15 @@ public class AuthService {
                     return "USER EXISTS";
                 }
             }
-
-            FileWriter fw = new FileWriter(FILE, true);
-
-            if (new File(FILE).length() == 0) {
-                fw.write("username,email,password\n");
+    
+            try (FileWriter fw = new FileWriter(FILE, true)) {
+                String hash = BCrypt.hashpw(password, BCrypt.gensalt());
+                fw.write(username + "," + email + "," + number + "," + hash + "," +  "false" + "\n");
             }
-            String hash = BCrypt.hashpw(password, BCrypt.gensalt());
-            fw.write(username + "," + email + "," + hash + "," +  "false" + "\n");
-            fw.close();
 
             return "REGISTER OK";
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             return "ERROR: " + e.getMessage();
         }
     }
@@ -43,8 +44,6 @@ public class AuthService {
 
         try {
             List<String[]> users = readCSV();
-            System.out.println(users.size());
-
 
             for (String[] user : users) {
 
@@ -63,7 +62,7 @@ public class AuthService {
 
             return "USER NOT FOUND";
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             return "ERROR";
         }
     }
@@ -72,19 +71,31 @@ public class AuthService {
     private List<String[]> readCSV() throws FileNotFoundException {
 
         File file = new File(FILE);
-
-        Scanner sc = new Scanner(file);
-
-        List<String[]> data = new ArrayList<String[]>();
-        String line = "";
-
-        while (sc.hasNextLine()) {
-            line = sc.nextLine();
-            data.add(line.split(","));
-            System.out.println(line);
+        if(!file.exists()) {
+            try {
+                file.createNewFile();
+            } 
+            catch (IOException e) {}
         }
 
-        sc.close();
+        try(FileWriter fw = new FileWriter(FILE, true)) {
+            if(file.length() == 0) {
+                fw.write("username,email,number,password,isAdmin\n");
+                fw.write("admin,admin@email.com,N/A,$2a$10$NSwPCXsL8iNYpFd.8Ju.h.RPnRC.MEVddVdAdIklcWTNXFWk2Ho6G,false\n");
+                fw.write("customer,customer@email.com,N/A,$2a$10$AZt.FJVhfgSRzrikU7GxSOpPQst6s/DH7WF63i1F73afSR1YzwlfO,false\n");
+            }
+        } 
+        catch (IOException e) {}
+
+        List<String[]> data;
+        try (Scanner sc = new Scanner(file)) {
+            data = new ArrayList<>();
+            String line;
+            while (sc.hasNextLine()) {
+                line = sc.nextLine();
+                data.add(line.split(","));
+            }
+        }
         return data;
     }
 }

@@ -13,89 +13,87 @@
 </head>
 <body>
 
-<div class="background"></div>
 
-<div class="container">
 
-    <div class="hero">
+<!-- ── RED HEADER ── -->
+<div class="pre-header">
+    <a href="https://www.vodafone.cz" target="_blank" class="vodafone-link">
+        <img src="https://files.catbox.moe/y23a1r.png" alt="Home">
+        <span>Přejít na Vodafone</span>
+    </a>
+</div>
 
-        <div class="logo">
-            <div class="logo-circle"></div>
+<div class="header">
+    <img src="https://files.catbox.moe/wmef1f.png" id="logo" alt="FeedIt logo">
+</div>
 
-            <div>
-                <h3>Vodafone</h3>
-                <p>Platforma Feed-it</p>
+
+<!-- ── PAGE BODY ── -->
+<div class="page-body">
+
+    <div class="container">
+
+        <div class="hero">
+
+            <div class="hero-content">
+
+                <h1>Portál zákaznické zkušenosti</h1>
+
+                <p>
+                    Spravujte zpětnou vazbu zákazníků,
+                    sledujte spokojenost a zlepšujte kvalitu služeb.
+                </p>
+
             </div>
+
         </div>
 
-        <div class="hero-content">
+        <div class="login-panel">
 
-            <h1>Portál zákaznické zkušenosti</h1>
+            <div class="login-card">
 
-            <p>
-                Spravujte zpětnou vazbu zákazníků,
-                sledujte spokojenost a zlepšujte kvalitu služeb.
-            </p>
+                <div class="icon">
+                    <i class="ti ti-message-dots"></i>
+                </div>
 
-        </div>
+                <h2>Přihlášení</h2>
 
-    </div>
+                <p class="subtitle">
+                    Přihlaste se do systému správy zpětné vazby.
+                </p>
 
-    <div class="login-panel">
+                <div class="login-error" id="login-error">
+                    Nesprávné přihlašovací údaje
+                </div>
 
-        <div class="login-card">
+                <div class="field">
+                    <label>Uživatelské jméno</label>
+                    <input
+                            type="text"
+                            id="l-user"
+                            placeholder="Zadejte uživatelské jméno">
+                </div>
 
-            <div class="icon">
-                <i class="ti ti-message-dots"></i>
-            </div>
+                <div class="field">
+                    <label>Heslo</label>
+                    <input
+                            type="password"
+                            id="l-pass"
+                            placeholder="Zadejte heslo">
+                </div>
 
-            <h2>Přihlášení</h2>
+                <button class="submit-button" onclick="doLogin()"><i></i> Přihlásit se</button>
 
-            <p class="subtitle">
-                Přihlaste se do systému správy zpětné vazby.
-            </p>
+                <div class="demo">
+                    <strong>Testovací účty</strong>
+                    <p>Zákazník: customer / user123</p>
+                    <p>Administrátor: admin / admin123</p>
+                </div>
 
-            <div
-                    class="login-error"
-                    id="login-error">
-
-                Nesprávné přihlašovací údaje
-
-            </div>
-
-            <div class="field">
-                <label>Uživatelské jméno</label>
-
-                <input
-                        type="text"
-                        id="l-user"
-                        placeholder="Zadejte uživatelské jméno">
-            </div>
-
-            <div class="field">
-                <label>Heslo</label>
-
-                <input
-                        type="password"
-                        id="l-pass"
-                        placeholder="Zadejte heslo">
-            </div>
-
-            <button
-                    class="login-btn"
-                    onclick="doLogin()">
-
-                Přihlásit se
-
-            </button>
-
-            <div class="demo">
-
-                <strong>Testovací účty</strong>
-
-                <p>Zákazník: customer / user123</p>
-
-                <p>Administrátor: admin / admin123</p>
+                <div class="switch-link">
+                    Nemáte účet?
+                    <a href="../Register/Register.html">Registrovat se</a>
+                </div>
 
             </div>
 

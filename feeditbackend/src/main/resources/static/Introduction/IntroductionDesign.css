@@ -10,14 +10,8 @@ body {
     display: flex;
     flex-direction: column;
     background:
-            radial-gradient(
-                    1000px circle at 0% 100%,
-                    rgba(255, 59, 48, 0.28) 0%,
-                    rgba(255, 59, 48, 0.16) 35%,
-                    rgba(255, 59, 48, 0.06) 60%,
-                    transparent 100%
-            ),
-            #f5f5f5;
+
+            #fafafa;
 }
 
 .top-bar {
@@ -168,7 +162,7 @@ body {
 }
 
 .left-side h1 {
-    font-size: 42px;
+    font-size: 64px;
     font-weight: 700;
     color: #111;
     line-height: 1.15;
